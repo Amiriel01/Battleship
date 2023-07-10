@@ -1,0 +1,1 @@
+(()=>{"use strict";let o=(o,i,s=0,t=!0)=>({shipName:o,shipLength:i,shipHits:s,hitCount:function(){this.hits++},shipFloating:t,floatStatus:function(){this.floating}}),i=o("Carrier",5);console.log(o(i)),console.log(i.shipName),console.log(i.shipLength),console.log(i.shipHits),console.log(i.shipFloating),o()})();
