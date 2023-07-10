@@ -1,3 +1,3 @@
 import { createShip } from "./ships";
 
-createShip();
+// createShip();
