@@ -6,12 +6,20 @@ let gameBoard = () => {
         player2Board: {},
         recieveAttack: function (player, row, column) {
             //which board is being used//
-            
+            let board = player === 1 ? this.player1Board : this.player2Board
             //check if a shot has been fired//
             //if shot has been fired already there then do nothing//
+            if (this.shotFired === true) {
+                return;
             //if shot has not been fired check to see if ship is there//
+            } else if (this.shotFired === false) {
+                if ([row][column] === null) {
+                    return "shotMissed";
+                }
+            } else {
+                return "shotHit";
+            }
             //record value of shot in gameboard for player//
-            let board = player === 1 ? this.player1Board : this.player2Board
             if (!board[row]) {
                 board[row] = {}
             }
@@ -19,7 +27,8 @@ let gameBoard = () => {
             //will be true or false depending on hit or not//
             board[row][column] = true
         },
-        shotFired(player, row, column) {
+
+        shotFired: function (player, row, column) {
             //if player = 1 ?(is true/false) true take option 1 and false take option 2//
             let board = player === 1 ? this.player1Board : this.player2Board
             // longer way to write it

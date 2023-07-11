@@ -1,4 +1,5 @@
 import { createShip } from "./ships";
+import { gameBoard } from "./gameboard";
 
 describe("the ship", () => {
     test("takes a hit", () => {
@@ -14,6 +15,25 @@ describe("the ship", () => {
     });
 });
 
-describe("the board"), () => {
+describe("the board has", () => {
+    test("shots fired", () => {
+        let row = null;
+        let column = null;
+        
+        let createGameboard = gameBoard();
+        createGameboard.shotFired();
+        
+        if ([row][column] === null) {
+            return "shotMissed";
+        }
+        expect(createGameboard.recieveAttack()).toBe("shotMissed");
+    })
     
-}
+});
+
+// test("shots fired", () => {
+//     let createGameboard = gameBoard();
+//     createGameboard.shotFired();
+//     expect(createGameboard.recieveAttack()).toBe("shotHit");
+// });
+
