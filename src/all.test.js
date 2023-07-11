@@ -13,3 +13,7 @@ describe("the ship", () => {
         expect(battleship.isSunk()).toBe(true);
     });
 });
+
+describe("the board"), () => {
+    
+}
