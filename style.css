@@ -76,3 +76,15 @@ p {
     margin-top: 1rem;
    justify-content: center;
 }
+
+#player1-gameboard,
+#player2-gameboard {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+}
+
+.row,
+.column {
+    border: 1px solid black;
+}
