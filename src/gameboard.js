@@ -1,23 +1,29 @@
 import { createShip } from "./ships";
 
-let gameBoard = () => {
+let gameBoard = (missed) => {
     return {
         player1Board: {},
         player2Board: {},
+        shipMissed: missed,
+        miss: function () {
+         if (this.shipMissed === true){
+            this.shipMissed++
+         } 
+      },
         recieveAttack: function (player, row, column) {
             //which board is being used//
             let board = player === 1 ? this.player1Board : this.player2Board
             //check if a shot has been fired//
             //if shot has been fired already there then do nothing//
-            if (this.shotFired === true) {
+            if (this.shotFired === false) {
                 return;
-            //if shot has not been fired check to see if ship is there//
-            } else if (this.shotFired === false) {
-                if ([row][column] === null) {
-                    return "shotMissed";
-                }
+                //if shot has not been fired check to see if ship is there//
+            } else if (this.shotFired === true) {
+                //false means they didn't hit a ship//
+                if ([row][column] === false)
+                    return this.shipMissed;
             } else {
-                return "shotHit";
+                return this.shipHits++;
             }
             //record value of shot in gameboard for player//
             if (!board[row]) {

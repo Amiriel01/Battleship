@@ -21,12 +21,9 @@ describe("the board has", () => {
         let column = null;
         
         let createGameboard = gameBoard();
-        createGameboard.shotFired();
+        createGameboard.shotFired(true);
         
-        if ([row][column] === null) {
-            return "shotMissed";
-        }
-        expect(createGameboard.recieveAttack()).toBe("shotMissed");
+        expect(createGameboard.recieveAttack()).toBe(1);
     })
     
 });
