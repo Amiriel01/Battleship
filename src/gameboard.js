@@ -6,10 +6,10 @@ let gameBoard = (missed) => {
         player2Board: {},
         shipMissed: missed,
         miss: function () {
-         if (this.shipMissed === true){
-            this.shipMissed++
-         } 
-      },
+            if (this.shipMissed === true) {
+                this.shipMissed++
+            }
+        },
         recieveAttack: function (player, row, column) {
             //which board is being used//
             let board = player === 1 ? this.player1Board : this.player2Board
@@ -55,6 +55,36 @@ let gameBoard = (missed) => {
     };
 }
 
+function createGrids() {
+    let grid1 = document.querySelector("#player1-gameboard");
+    
+    for (let r = 0; r < 10; r++) {
+        let rows1 = document.createElement("div");
+        rows1.classList.add("row")
+        grid1.appendChild(rows1);
+        
+        for (let c = 0; c < 10; c++) {
+            let columns1 = document.createElement("div");
+            columns1.classList.add("column")
+            grid1.appendChild(columns1);
+        }
+    }
+
+    let grid2 = document.querySelector("#player2-gameboard");
+
+    for (let r = 0; r < 10; r++) {
+        let rows2 = document.createElement("div");
+        rows2.classList.add("row")
+        grid2.appendChild(rows2);
+        
+        for (let c = 0; c < 10; c++) {
+            let columns2 = document.createElement("div");
+            columns2.classList.add("column")
+            grid2.appendChild(columns2);
+        }
+    }
+}
+
 
 // let pickShip = function () {
 //     if (ship.name === "Carrier") {
@@ -72,3 +102,4 @@ let gameBoard = (missed) => {
 
 
 export { gameBoard };
+export { createGrids };
