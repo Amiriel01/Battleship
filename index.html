@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,7 +8,54 @@
     <link rel="stylesheet" href="style.css">
     <title>Battleship</title>
 </head>
+
 <body>
+    <div id="title">Battleship</div>
+    <div id="instructions">Destroy all the enemy ships to win the game!</div>
+    <div class="player-buttons">
+        <button>Player vs. Player</button>
+        <button>Player vs. Computer</button>
+    </div>
+    <div class="gameboards-controls">
+        <div class="controls">
+            <div class="gameboard-title">Player One</div>
+            <button class="randomize-button">Randomize Ships</button>
+            <p>OR</p>
+            <div class="ships-bank">
+                <div class="ship-text">Drag and Drop Ships On The Board</div>
+                <div class="ship-options">
+                    <div class="carrier">Carrier</div>
+                    <div class="battleship">Battleship</div>
+                    <div class="destroyer">Destroyer</div>
+                    <div class="submarine">Submarine</div>
+                    <div class="patrol">Patrol Boat</div>
+                </div>
+            </div>
+        </div>
+        <div class="gameboards">
+            <div id="player1-gameboard"></div>
+            <div id="player2-gameboard"></div>
+        </div>
+        <div class="controls">
+            <div class="gameboard-title">Player Two</div>
+            <button class="randomize-button">Randomize Ships</button>
+            <p>OR</p>
+            <div class="ships-bank">
+                <div class="ship-text">Drag and Drop Ships On The Board</div>
+                <div class="ship-options">
+                    <div class="carrier">Carrier</div>
+                    <div class="battleship">Battleship</div>
+                    <div class="destroyer">Destroyer</div>
+                    <div class="submarine">Submarine</div>
+                    <div class="patrol">Patrol Boat</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="reset-game">
+        <button>Play Again</button>
+    </div>
     <script src="main.js"></script>
 </body>
+
 </html>
