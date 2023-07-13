@@ -1,8 +1,7 @@
 // import { createShip } from "./ships";
-import { createGrids, createShips } from "./gameboard";
+import { createGrids, createShips, dragDrop } from "./gameboard";
 
-
-// createShip();
-createGrids();
 createShips(document.getElementById("ship-options1"));
 createShips(document.getElementById("ship-options2"));
+createGrids();
+dragDrop();
