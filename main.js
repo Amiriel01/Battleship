@@ -102,6 +102,7 @@ function dragDrop() {
         console.log("dragover");
         event.preventDefault();
     })
+    
     grid1.addEventListener("drop", (event) => {
         console.log("drop");
         event.preventDefault();
@@ -128,7 +129,7 @@ function createShips(element) {
     ships.forEach((ship) => {
         let shipElement = document.createElement("div");
         shipElement.innerText = ship.shipName;
-        shipElement.id = "ship-element";
+        shipElement.classList.add("ship-element");
         element.appendChild(shipElement);
         shipElement.setAttribute('draggable', true);
     })
