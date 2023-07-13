@@ -1,4 +1,4 @@
-import { CleanPlugin } from "webpack";
+
 import { createShip } from "./ships";
 
 let gameBoard = () => {
