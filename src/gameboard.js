@@ -73,6 +73,7 @@ function createGrids() {
 
 function dragDrop() {
     let shipElement = document.querySelector(".ship-element");
+    let grid1 = document.querySelector("#player1-gameboard");
 
     shipElement.addEventListener("dragstart", (event) => {
         console.log("dragstart");
@@ -84,7 +85,7 @@ function dragDrop() {
         console.log("dragover");
         event.preventDefault();
     })
-    
+
     grid1.addEventListener("drop", (event) => {
         console.log("drop");
         event.preventDefault();
