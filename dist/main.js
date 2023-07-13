@@ -92,6 +92,7 @@ function createGrids() {
 function dragDrop() {
     let shipElement = document.querySelector(".ship-element");
     let grid1 = document.querySelector("#player1-gameboard");
+    let grid2 = document.querySelector("#player2-gameboard");
 
     shipElement.addEventListener("dragstart", (event) => {
         console.log("dragstart");
@@ -109,6 +110,21 @@ function dragDrop() {
         event.preventDefault();
         event.dataTransfer.getData("text/plain", shipElement);
         if (event.target.id === "#player1-gameboard") {
+            shipElement.parentNode.removeChild(shipElement);
+            event.target.appendChild(shipElement);
+        }
+    })
+
+    grid2.addEventListener("dragover", (event) => {
+        console.log("dragover");
+        event.preventDefault();
+    })
+
+    grid2.addEventListener("drop", (event) => {
+        console.log("drop");
+        event.preventDefault();
+        event.dataTransfer.getData("text/plain", shipElement);
+        if (event.target.id === "#player2-gameboard") {
             shipElement.parentNode.removeChild(shipElement);
             event.target.appendChild(shipElement);
         }
