@@ -1,4 +1,3 @@
-
 import { createShip } from "./ships";
 
 let gameBoard = () => {
