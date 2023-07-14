@@ -90,16 +90,15 @@ function createGrids() {
 }
 
 function dragDrop() {
+    
     let shipElement = document.querySelectorAll(".ship-element");
-
-
-    shipElement.addEventListener("dragstart", (event) => {
-        console.log("dragstart");
-        event.dataTransfer.clearData();
-        event.dataTransfer.setData("text/plain", event.shipElement);
-    })
-
-
+    for (let i = 0; i < shipElement.length; i++) {
+        shipElement[i].addEventListener("dragstart", function(event) {
+            console.log("dragstart");
+            event.dataTransfer.clearData();
+            event.dataTransfer.setData("text/plain", event.shipElement);
+        })
+    }
 
     let grid1 = document.querySelector("#player1-gameboard");
     let grid2 = document.querySelector("#player2-gameboard");
