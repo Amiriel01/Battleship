@@ -62,137 +62,117 @@ let createTile = (gridTile, row, column) => {
 
 }
 
-function createGrids(gameBoardObject) {
-    let grid1 = document.querySelector("#player1-gameboard");
+function createGrids(gridElement, gameBoardObject) {
 
     for (let r = 0; r < 10; r++) {
-        let rows1 = document.createElement("div");
-        rows1.classList.add("row")
-        grid1.appendChild(rows1);
 
         for (let c = 0; c < 10; c++) {
-            let columns1 = document.createElement("div");
-            columns1.classList.add("column")
-            grid1.appendChild(columns1);
-            let myGridTile = createTile(columns1, r, c);
-            let enemyGridTile = createTile(columns1, r, c);
+            let tile = document.createElement("div");
+            tile.classList.add("tile");
+            gridElement.appendChild(tile);
+            let myGridTile = createTile(tile, r, c);
+            let enemyGridTile = createTile(tile, r, c);
             gameBoardObject.myBoard.push(myGridTile);
             gameBoardObject.enemyBoard.push(enemyGridTile);
         }
     }
-
-    let grid2 = document.querySelector("#player2-gameboard");
-
-    for (let r = 0; r < 10; r++) {
-        let rows2 = document.createElement("div");
-        rows2.classList.add("row")
-        grid2.appendChild(rows2);
-
-        for (let c = 0; c < 10; c++) {
-            let columns2 = document.createElement("div");
-            columns2.classList.add("column")
-            grid2.appendChild(columns2);
-        }
-    }
 }
 
-function dragDrop() {
-    
-    // let shipElement = document.querySelectorAll(".ship-element");
-    // for (let i = 0; i < shipElement.length; i++) {
-    //     shipElement[i].addEventListener("dragstart", function(event) {
-    //         console.log("dragstart");
-    //         event.dataTransfer.clearData();
-    //         event.dataTransfer.setData("text/plain", event.shipElement);
-    //     })
-    // }
+function dragDropInitializer(player, ships, gameBoardObject) {
 
-    let grid1 = document.querySelector("#player1-gameboard");
-    let grid2 = document.querySelector("#player2-gameboard");
-    let shipsBank = document.querySelector(".ships-bank");
+    let grid;
+    let shipBank;
 
-    grid1.addEventListener("dragover", (e) => gridHoverOver(e));
+    if (player === "player1") {
+        grid = document.querySelector("#player1-gameboard");
+        shipBank = document.querySelector("#ship-options1")
+    } else if (player === "player2") {
+        grid = document.querySelector("#player2-gameboard");
+        shipBank = document.querySelector("#ship-options2");
+    }
 
-    grid1.addEventListener("drop", (event) => {
-        console.log("drop");
-        event.preventDefault();
-        event.dataTransfer.getData("text/plain", shipElement);
-        if (event.target.id === "#player1-gameboard") {
-            shipElement.parentNode.removeChild(shipElement);
-            event.target.appendChild(shipElement);
-        }
-    })
+    let tiles = grid.querySelectorAll(".tile");
 
-    grid2.addEventListener("dragover", (event) => {
-        console.log("dragover");
-        event.preventDefault();
-    })
+    tiles.forEach((tile, tileIndex) => {
+        tile.addEventListener("dragover", (e) => gridHoverOver(e));
+        tile.addEventListener("dragleave", (e) => gridLeaveHover(e));
 
-    grid2.addEventListener("drop", (event) => {
-        console.log("drop");
-        event.preventDefault();
-        console.log("hello")
-        event.dataTransfer.getData("text/plain", shipElement);
-        if (event.target.id === "#player2-gameboard") {
-            // shipElement.parentNode.removeChild(shipElement);
-            shipsBank.removeChild(shipElement);
-            // event.target.appendChild(shipElement);
-            grid2.appendChild(shipElement);
-            console.log("hi")
-        }
+        tile.addEventListener("drop", (event) => {
+            console.log("drop");
+            event.preventDefault();
+            shipDrop(event, tileIndex, getShip(event, ships), gameBoardObject);
+            renderShips(shipBank, ships);
+            
+        })
     })
 }
 
 function createShips(element) {
     let ships = [
         createShip("Carrier", 5),
-        createShip("Carrier", 5),
-        createShip("Battleship", 4),
         createShip("Battleship", 4),
         createShip("Submarine", 3),
-        createShip("Submarine", 3),
-        createShip("Destroyer", 3),
         createShip("Destroyer", 3),
         createShip("Patrol Boat", 2),
-        createShip("Patrol Boat", 2)
     ]
-    ships.forEach((ship) => {
-        let shipElement = document.createElement("div");
-        shipElement.innerText = ship.shipName;
-        shipElement.classList.add("ship-element");
-        element.appendChild(shipElement);
-        shipElement.setAttribute('draggable', true);
-        shipElement.addEventListener("dragstart", (e) => shipDragStart(e,ship));
-        
+    renderShips(element, ships);
+    return ships;
+}
+
+function renderShips(element, ships) {
+    element.innerHTML = "";
+
+    ships.forEach((ship, shipIndex) => {
+        if (ship.shipPlaced === false) {
+            let shipElement = document.createElement("div");
+            shipElement.innerText = ship.shipName;
+            shipElement.classList.add("ship-element");
+            element.appendChild(shipElement);
+            shipElement.setAttribute('draggable', true);
+            shipElement.addEventListener("dragstart", (e) => shipDragStart(e, shipIndex));
+        }
     })
 }
-function shipDragStart(e, ship) {
+
+function shipDragStart(e, shipIndex) {
     console.log("dragstart");
-    console.log(ship)
+    console.log(shipIndex);
     e.dataTransfer.clearData();
-    e.dataTransfer.setData("text/plain", e.shipElement);
+    // e.dataTransfer.setData("text/plain", e.shipElement);
+    e.dataTransfer.setData("ship", shipIndex);
 }
 
-function shipDrop(e, ship) {
-
+function shipDrop(e, tileIndex, ship, gameBoardObject) {
+    // console.log(ship);
+    // console.log(gameBoardObject);
+    let tileObject = gameBoardObject.myBoard[tileIndex];
+    console.log(tileObject);
+    tileObject.ship = ship;
+    ship.shipPlaced = true;
+    tileObject.tile.classList.add("ship-here");
 }
 
 function gridHoverOver(e) {
-    console.log(e)
-    console.log("dragover");
     e.preventDefault();
     let element = e.target;
     element.classList.add("ship-hover-marker");
-    
 }
 
-function  gridLeaveHover(e) {
+function gridLeaveHover(e) {
+    e.preventDefault();
+    let element = e.target;
+    element.classList.remove("ship-hover-marker");
+}
 
+function getShip(e, ships) {
+    //get data called ship, expect ship to be a number(index) and this number represents where in the array the ship is and it will return the ship object//
+    let shipIndex = e.dataTransfer.getData("ship");
+    return ships[parseInt(shipIndex)];
 }
 
 export {
     gameBoard,
     createGrids,
     createShips,
-    dragDrop,
+    dragDropInitializer,
 };

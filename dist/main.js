@@ -2,6 +2,34 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/game-manager.js":
+/*!*****************************!*\
+  !*** ./src/game-manager.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ "./src/player.js");
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (() => {
+    
+    return {
+        player1: (0,_player__WEBPACK_IMPORTED_MODULE_0__.player)(document.getElementById("player1-controls")),
+        player2: (0,_player__WEBPACK_IMPORTED_MODULE_0__.player)(document.getElementById("player2-controls")),
+        initialize: function () {
+            console.log(this.player1)
+            this.player1.initialize();
+            this.player2.initialize();
+        }
+    };
+});
+
+/***/ }),
+
 /***/ "./src/gameboard.js":
 /*!**************************!*\
   !*** ./src/gameboard.js ***!
@@ -12,7 +40,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   createGrids: () => (/* binding */ createGrids),
 /* harmony export */   createShips: () => (/* binding */ createShips),
-/* harmony export */   dragDrop: () => (/* binding */ dragDrop),
+/* harmony export */   dragDropInitializer: () => (/* binding */ dragDropInitializer),
 /* harmony export */   gameBoard: () => (/* binding */ gameBoard)
 /* harmony export */ });
 /* harmony import */ var _ships__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ships */ "./src/ships.js");
@@ -80,132 +108,161 @@ let createTile = (gridTile, row, column) => {
 
 }
 
-function createGrids(gameBoardObject) {
-    let grid1 = document.querySelector("#player1-gameboard");
+function createGrids(gridElement, gameBoardObject) {
 
     for (let r = 0; r < 10; r++) {
-        let rows1 = document.createElement("div");
-        rows1.classList.add("row")
-        grid1.appendChild(rows1);
 
         for (let c = 0; c < 10; c++) {
-            let columns1 = document.createElement("div");
-            columns1.classList.add("column")
-            grid1.appendChild(columns1);
-            let myGridTile = createTile(columns1, r, c);
-            let enemyGridTile = createTile(columns1, r, c);
+            let tile = document.createElement("div");
+            tile.classList.add("tile");
+            gridElement.appendChild(tile);
+            let myGridTile = createTile(tile, r, c);
+            let enemyGridTile = createTile(tile, r, c);
             gameBoardObject.myBoard.push(myGridTile);
             gameBoardObject.enemyBoard.push(enemyGridTile);
         }
     }
-
-    let grid2 = document.querySelector("#player2-gameboard");
-
-    for (let r = 0; r < 10; r++) {
-        let rows2 = document.createElement("div");
-        rows2.classList.add("row")
-        grid2.appendChild(rows2);
-
-        for (let c = 0; c < 10; c++) {
-            let columns2 = document.createElement("div");
-            columns2.classList.add("column")
-            grid2.appendChild(columns2);
-        }
-    }
 }
 
-function dragDrop() {
-    
-    // let shipElement = document.querySelectorAll(".ship-element");
-    // for (let i = 0; i < shipElement.length; i++) {
-    //     shipElement[i].addEventListener("dragstart", function(event) {
-    //         console.log("dragstart");
-    //         event.dataTransfer.clearData();
-    //         event.dataTransfer.setData("text/plain", event.shipElement);
-    //     })
-    // }
+function dragDropInitializer(player, ships, gameBoardObject) {
 
-    let grid1 = document.querySelector("#player1-gameboard");
-    let grid2 = document.querySelector("#player2-gameboard");
-    let shipsBank = document.querySelector(".ships-bank");
+    let grid;
+    let shipBank;
 
-    grid1.addEventListener("dragover", (e) => gridHoverOver(e));
+    if (player === "player1") {
+        grid = document.querySelector("#player1-gameboard");
+        shipBank = document.querySelector("#ship-options1")
+    } else if (player === "player2") {
+        grid = document.querySelector("#player2-gameboard");
+        shipBank = document.querySelector("#ship-options2");
+    }
 
-    grid1.addEventListener("drop", (event) => {
-        console.log("drop");
-        event.preventDefault();
-        event.dataTransfer.getData("text/plain", shipElement);
-        if (event.target.id === "#player1-gameboard") {
-            shipElement.parentNode.removeChild(shipElement);
-            event.target.appendChild(shipElement);
-        }
-    })
+    let tiles = grid.querySelectorAll(".tile");
 
-    grid2.addEventListener("dragover", (event) => {
-        console.log("dragover");
-        event.preventDefault();
-    })
+    tiles.forEach((tile, tileIndex) => {
+        tile.addEventListener("dragover", (e) => gridHoverOver(e));
+        tile.addEventListener("dragleave", (e) => gridLeaveHover(e));
 
-    grid2.addEventListener("drop", (event) => {
-        console.log("drop");
-        event.preventDefault();
-        console.log("hello")
-        event.dataTransfer.getData("text/plain", shipElement);
-        if (event.target.id === "#player2-gameboard") {
-            // shipElement.parentNode.removeChild(shipElement);
-            shipsBank.removeChild(shipElement);
-            // event.target.appendChild(shipElement);
-            grid2.appendChild(shipElement);
-            console.log("hi")
-        }
+        tile.addEventListener("drop", (event) => {
+            console.log("drop");
+            event.preventDefault();
+            shipDrop(event, tileIndex, getShip(event, ships), gameBoardObject);
+            renderShips(shipBank, ships);
+            
+        })
     })
 }
 
 function createShips(element) {
     let ships = [
         (0,_ships__WEBPACK_IMPORTED_MODULE_0__.createShip)("Carrier", 5),
-        (0,_ships__WEBPACK_IMPORTED_MODULE_0__.createShip)("Carrier", 5),
-        (0,_ships__WEBPACK_IMPORTED_MODULE_0__.createShip)("Battleship", 4),
         (0,_ships__WEBPACK_IMPORTED_MODULE_0__.createShip)("Battleship", 4),
         (0,_ships__WEBPACK_IMPORTED_MODULE_0__.createShip)("Submarine", 3),
-        (0,_ships__WEBPACK_IMPORTED_MODULE_0__.createShip)("Submarine", 3),
-        (0,_ships__WEBPACK_IMPORTED_MODULE_0__.createShip)("Destroyer", 3),
         (0,_ships__WEBPACK_IMPORTED_MODULE_0__.createShip)("Destroyer", 3),
         (0,_ships__WEBPACK_IMPORTED_MODULE_0__.createShip)("Patrol Boat", 2),
-        (0,_ships__WEBPACK_IMPORTED_MODULE_0__.createShip)("Patrol Boat", 2)
     ]
-    ships.forEach((ship) => {
-        let shipElement = document.createElement("div");
-        shipElement.innerText = ship.shipName;
-        shipElement.classList.add("ship-element");
-        element.appendChild(shipElement);
-        shipElement.setAttribute('draggable', true);
-        shipElement.addEventListener("dragstart", (e) => shipDragStart(e,ship));
-        
+    renderShips(element, ships);
+    return ships;
+}
+
+function renderShips(element, ships) {
+    element.innerHTML = "";
+
+    ships.forEach((ship, shipIndex) => {
+        if (ship.shipPlaced === false) {
+            let shipElement = document.createElement("div");
+            shipElement.innerText = ship.shipName;
+            shipElement.classList.add("ship-element");
+            element.appendChild(shipElement);
+            shipElement.setAttribute('draggable', true);
+            shipElement.addEventListener("dragstart", (e) => shipDragStart(e, shipIndex));
+        }
     })
 }
-function shipDragStart(e, ship) {
+
+function shipDragStart(e, shipIndex) {
     console.log("dragstart");
-    console.log(ship)
+    console.log(shipIndex);
     e.dataTransfer.clearData();
-    e.dataTransfer.setData("text/plain", e.shipElement);
+    // e.dataTransfer.setData("text/plain", e.shipElement);
+    e.dataTransfer.setData("ship", shipIndex);
 }
 
-function shipDrop(e, ship) {
-
+function shipDrop(e, tileIndex, ship, gameBoardObject) {
+    // console.log(ship);
+    // console.log(gameBoardObject);
+    let tileObject = gameBoardObject.myBoard[tileIndex];
+    console.log(tileObject);
+    tileObject.ship = ship;
+    ship.shipPlaced = true;
+    tileObject.tile.classList.add("ship-here");
 }
 
 function gridHoverOver(e) {
-    console.log(e)
-    console.log("dragover");
     e.preventDefault();
     let element = e.target;
     element.classList.add("ship-hover-marker");
-    
 }
 
-function  gridLeaveHover(e) {
+function gridLeaveHover(e) {
+    e.preventDefault();
+    let element = e.target;
+    element.classList.remove("ship-hover-marker");
+}
 
+function getShip(e, ships) {
+    //get data called ship, expect ship to be a number(index) and this number represents where in the array the ship is and it will return the ship object//
+    let shipIndex = e.dataTransfer.getData("ship");
+    return ships[parseInt(shipIndex)];
+}
+
+
+
+
+/***/ }),
+
+/***/ "./src/player.js":
+/*!***********************!*\
+  !*** ./src/player.js ***!
+  \***********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   player: () => (/* binding */ player)
+/* harmony export */ });
+let player = (rootElement) => {
+    return {
+        root: rootElement,
+        orientation: "Horizontal",
+        flipOrientation: function () {
+            if (this.orientation === "Horizontal") {
+                this.orientation = "Vertical";
+            } else {
+                this.orientation = "Horizontal";
+            }
+        },
+
+        initialize: function () {
+            this.bindOrientationButton();
+
+        },
+
+        bindOrientationButton: function () {
+            let button = this.root.querySelector("#ship-orientation");
+            button.addEventListener("click", () => {
+                this.flipOrientation();
+                button.innerText = this.orientation;
+            });
+
+        },
+    }
+}
+
+//computer selection//
+function getComputerChoice() {
+    let computerSelection = Math.floor(Math.random() * 100);
+    // return choices[computerSelection];
 }
 
 
@@ -231,6 +288,7 @@ let createShip = (name, length, row, column, hits = 0) => {
       shipLength: length,
       shipRow: row,
       shipColumn: column,
+      shipPlaced: false,
       shipHits: hits,
       hit: function () {
          if (this.shipHits + 1 <= this.shipLength) {
@@ -311,13 +369,27 @@ var __webpack_exports__ = {};
   \**********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _gameboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./gameboard */ "./src/gameboard.js");
+/* harmony import */ var _game_manager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game-manager */ "./src/game-manager.js");
 // import { createShip } from "./ships";
 
 
-(0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.createShips)(document.getElementById("ship-options1"));
-(0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.createShips)(document.getElementById("ship-options2"));
-(0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.createGrids)();
-(0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.dragDrop)();
+
+(0,_game_manager__WEBPACK_IMPORTED_MODULE_1__["default"])()
+    .initialize();
+
+let player1Ships = (0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.createShips)(document.getElementById("ship-options1"));
+let player2Ships = (0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.createShips)(document.getElementById("ship-options2"));
+
+let gameBoard1 = (0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.gameBoard)();
+let gameBoard2 = (0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.gameBoard)();
+
+(0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.createGrids)(document.getElementById("player1-gameboard"), gameBoard1);
+(0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.createGrids)(document.getElementById("player2-gameboard"), gameBoard2);
+
+(0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.dragDropInitializer)("player1", player1Ships, gameBoard1);
+(0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.dragDropInitializer)("player2", player2Ships, gameBoard2);
+
+
 
 })();
 

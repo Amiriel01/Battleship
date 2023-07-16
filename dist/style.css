@@ -86,11 +86,10 @@ p {
     grid-template-rows: repeat(10, 1fr);
     z-index: 0;
 }
-
-.row,
-.column {
+.tile {
     border: 1px solid black;
 }
+
 
 .ship-element {
    z-index: 0;
@@ -98,4 +97,8 @@ p {
 
 .ship-hover-marker {
     background-color: aquamarine;
+}
+
+.ship-here {
+    background-color: blue;
 }

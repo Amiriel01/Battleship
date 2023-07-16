@@ -6,6 +6,7 @@ let createShip = (name, length, row, column, hits = 0) => {
       shipLength: length,
       shipRow: row,
       shipColumn: column,
+      shipPlaced: false,
       shipHits: hits,
       hit: function () {
          if (this.shipHits + 1 <= this.shipLength) {
