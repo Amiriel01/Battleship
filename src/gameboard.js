@@ -5,6 +5,9 @@ let gameBoard = () => {
         player1Board: {},
         player2Board: {},
 
+        myBoard: [],
+        enemyBoard: [],
+
         recieveAttack: function (player, row, column) {
             //which board is being used//
             let board = player === 1 ? this.player1Board : this.player2Board
@@ -41,7 +44,25 @@ let gameBoard = () => {
     };
 }
 
-function createGrids() {
+let createTile = (gridTile, row, column) => {
+    return {
+        //tile is the element tile in the DOM created for the grid (it's what you hover over)//
+        tile: gridTile,
+        //isHit represents whether shot was fired and is a hit//
+        isHit: false,
+        //isMiss represents whether shot was fired and is a miss//
+        isMiss: false,
+        //ship is the ship object if the ship is in the tile//
+        ship: null,
+        //row is the x coord//
+        row: row,
+        //column is the y coord//
+        column: column,
+    };
+
+}
+
+function createGrids(gameBoardObject) {
     let grid1 = document.querySelector("#player1-gameboard");
 
     for (let r = 0; r < 10; r++) {
@@ -53,6 +74,10 @@ function createGrids() {
             let columns1 = document.createElement("div");
             columns1.classList.add("column")
             grid1.appendChild(columns1);
+            let myGridTile = createTile(columns1, r, c);
+            let enemyGridTile = createTile(columns1, r, c);
+            gameBoardObject.myBoard.push(myGridTile);
+            gameBoardObject.enemyBoard.push(enemyGridTile);
         }
     }
 
@@ -73,22 +98,20 @@ function createGrids() {
 
 function dragDrop() {
     
-    let shipElement = document.querySelectorAll(".ship-element");
-    for (let i = 0; i < shipElement.length; i++) {
-        shipElement[i].addEventListener("dragstart", function(event) {
-            console.log("dragstart");
-            event.dataTransfer.clearData();
-            event.dataTransfer.setData("text/plain", event.shipElement);
-        })
-    }
+    // let shipElement = document.querySelectorAll(".ship-element");
+    // for (let i = 0; i < shipElement.length; i++) {
+    //     shipElement[i].addEventListener("dragstart", function(event) {
+    //         console.log("dragstart");
+    //         event.dataTransfer.clearData();
+    //         event.dataTransfer.setData("text/plain", event.shipElement);
+    //     })
+    // }
 
     let grid1 = document.querySelector("#player1-gameboard");
     let grid2 = document.querySelector("#player2-gameboard");
+    let shipsBank = document.querySelector(".ships-bank");
 
-    grid1.addEventListener("dragover", (event) => {
-        console.log("dragover");
-        event.preventDefault();
-    })
+    grid1.addEventListener("dragover", (e) => gridHoverOver(e));
 
     grid1.addEventListener("drop", (event) => {
         console.log("drop");
@@ -108,13 +131,18 @@ function dragDrop() {
     grid2.addEventListener("drop", (event) => {
         console.log("drop");
         event.preventDefault();
+        console.log("hello")
         event.dataTransfer.getData("text/plain", shipElement);
         if (event.target.id === "#player2-gameboard") {
-            shipElement.parentNode.removeChild(shipElement);
-            event.target.appendChild(shipElement);
+            // shipElement.parentNode.removeChild(shipElement);
+            shipsBank.removeChild(shipElement);
+            // event.target.appendChild(shipElement);
+            grid2.appendChild(shipElement);
+            console.log("hi")
         }
     })
 }
+
 function createShips(element) {
     let ships = [
         createShip("Carrier", 5),
@@ -134,7 +162,32 @@ function createShips(element) {
         shipElement.classList.add("ship-element");
         element.appendChild(shipElement);
         shipElement.setAttribute('draggable', true);
+        shipElement.addEventListener("dragstart", (e) => shipDragStart(e,ship));
+        
     })
+}
+function shipDragStart(e, ship) {
+    console.log("dragstart");
+    console.log(ship)
+    e.dataTransfer.clearData();
+    e.dataTransfer.setData("text/plain", e.shipElement);
+}
+
+function shipDrop(e, ship) {
+
+}
+
+function gridHoverOver(e) {
+    console.log(e)
+    console.log("dragover");
+    e.preventDefault();
+    let element = e.target;
+    element.classList.add("ship-hover-marker");
+    
+}
+
+function  gridLeaveHover(e) {
+
 }
 
 export {

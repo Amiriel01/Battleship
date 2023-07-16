@@ -18,11 +18,4 @@ let createShip = (name, length, row, column, hits = 0) => {
    };
 }
 
-// let shipOptions = document.querySelector(".ship-options")
-
-// createShip("Carrier", 5);
-
-// let carrier = document.querySelector("#carrier");
-// shipOptions.appendChild(carrier);
-
 export { createShip }
