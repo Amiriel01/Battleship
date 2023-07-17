@@ -1,4 +1,5 @@
-import { createShip } from "./ships";
+// import { createShips } from "./player";
+import { renderShips } from "./player";
 
 let gameBoard = () => {
     return {
@@ -107,32 +108,32 @@ function dragDropInitializer(player, ships, gameBoardObject) {
     })
 }
 
-function createShips(element) {
-    let ships = [
-        createShip("Carrier", 5),
-        createShip("Battleship", 4),
-        createShip("Submarine", 3),
-        createShip("Destroyer", 3),
-        createShip("Patrol Boat", 2),
-    ]
-    renderShips(element, ships);
-    return ships;
-}
+// function createShips(element) {
+//     let ships = [
+//         createShip("Carrier", 5),
+//         createShip("Battleship", 4),
+//         createShip("Submarine", 3),
+//         createShip("Destroyer", 3),
+//         createShip("Patrol Boat", 2),
+//     ]
+//     renderShips(element, ships);
+//     return ships;
+// }
 
-function renderShips(element, ships) {
-    element.innerHTML = "";
+// function renderShips(element, ships) {
+//     element.innerHTML = "";
 
-    ships.forEach((ship, shipIndex) => {
-        if (ship.shipPlaced === false) {
-            let shipElement = document.createElement("div");
-            shipElement.innerText = ship.shipName;
-            shipElement.classList.add("ship-element");
-            element.appendChild(shipElement);
-            shipElement.setAttribute('draggable', true);
-            shipElement.addEventListener("dragstart", (e) => shipDragStart(e, shipIndex));
-        }
-    })
-}
+//     ships.forEach((ship, shipIndex) => {
+//         if (ship.shipPlaced === false) {
+//             let shipElement = document.createElement("div");
+//             shipElement.innerText = ship.shipName;
+//             shipElement.classList.add("ship-element");
+//             element.appendChild(shipElement);
+//             shipElement.setAttribute('draggable', true);
+//             shipElement.addEventListener("dragstart", (e) => shipDragStart(e, shipIndex));
+//         }
+//     })
+// }
 
 function shipDragStart(e, shipIndex) {
     console.log("dragstart");
@@ -173,6 +174,6 @@ function getShip(e, ships) {
 export {
     gameBoard,
     createGrids,
-    createShips,
     dragDropInitializer,
+    shipDragStart,
 };
