@@ -208,6 +208,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 let player = (rootElement) => {
     return {
         root: rootElement,
@@ -285,13 +286,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 //create the ship factory function//
 //all boats start with 0 hits and are floating//
-let createShip = (name, length, row, column, hits = 0) => {
+let createShip = (name, length, row, column, orientation = "Horizontal", hits = 0) => {
    return {
       shipName: name,
       shipLength: length,
       shipRow: row,
       shipColumn: column,
       shipPlaced: false,
+      shipOrientation: orientation,
       shipHits: hits,
       hit: function () {
          if (this.shipHits + 1 <= this.shipLength) {
