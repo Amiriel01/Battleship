@@ -1,6 +1,7 @@
 // import { createShip } from "./ships";
-import { createGrids, createShips, dragDropInitializer, gameBoard } from "./gameboard";
+import { createGrids, dragDropInitializer, gameBoard } from "./gameboard";
 import gameManager from "./game-manager";
+import { createShips } from "./player";
 
 gameManager()
     .initialize();
