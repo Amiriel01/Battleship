@@ -78,71 +78,7 @@ function createGrids(gridElement, gameBoardObject) {
     }
 }
 
-function dragDropInitializer(player, ships, gameBoardObject) {
-
-    let grid;
-    let shipBank;
-
-    if (player === "player1") {
-        grid = document.querySelector("#player1-gameboard");
-        shipBank = document.querySelector("#ship-options1")
-    } else if (player === "player2") {
-        grid = document.querySelector("#player2-gameboard");
-        shipBank = document.querySelector("#ship-options2");
-    }
-
-    let tiles = grid.querySelectorAll(".tile");
-
-    tiles.forEach((tile, tileIndex) => {
-        tile.addEventListener("dragover", (e) => gridHoverOver(e));
-        tile.addEventListener("dragleave", (e) => gridLeaveHover(e));
-
-        tile.addEventListener("drop", (event) => {
-            console.log("drop");
-            event.preventDefault();
-            shipDrop(event, tileIndex, getShip(event, ships), gameBoardObject);
-            renderShips(shipBank, ships);
-            
-        })
-    })
-}
-
-function shipDragStart(e, shipIndex) {
-    console.log("dragstart");
-    console.log(shipIndex);
-    e.dataTransfer.clearData();
-    e.dataTransfer.setData("ship", shipIndex);
-}
-
-function shipDrop(e, tileIndex, ship, gameBoardObject) {
-    let tileObject = gameBoardObject.myBoard[tileIndex];
-    console.log(tileObject);
-    tileObject.ship = ship;
-    ship.shipPlaced = true;
-    tileObject.tile.classList.add("ship-here");
-}
-
-function gridHoverOver(e) {
-    e.preventDefault();
-    let element = e.target;
-    element.classList.add("ship-hover-marker");
-}
-
-function gridLeaveHover(e) {
-    e.preventDefault();
-    let element = e.target;
-    element.classList.remove("ship-hover-marker");
-}
-
-function getShip(e, ships) {
-    //get data called ship, expect ship to be a number(index) and this number represents where in the array the ship is and it will return the ship object//
-    let shipIndex = e.dataTransfer.getData("ship");
-    return ships[parseInt(shipIndex)];
-}
-
 export {
     gameBoard,
     createGrids,
-    dragDropInitializer,
-    shipDragStart,
 };

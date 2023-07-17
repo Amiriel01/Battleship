@@ -50,8 +50,8 @@ p {
     margin-bottom: 1rem;
 }
 
-#ship-options1,
-#ship-options2 {
+#ship-options
+{
     border: 5px solid purple;
     margin-top: 2rem;
     height: 10rem;
