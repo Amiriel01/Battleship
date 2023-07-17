@@ -1,4 +1,3 @@
-// import { createShips } from "./player";
 import { renderShips } from "./player";
 
 let gameBoard = () => {
@@ -108,44 +107,14 @@ function dragDropInitializer(player, ships, gameBoardObject) {
     })
 }
 
-// function createShips(element) {
-//     let ships = [
-//         createShip("Carrier", 5),
-//         createShip("Battleship", 4),
-//         createShip("Submarine", 3),
-//         createShip("Destroyer", 3),
-//         createShip("Patrol Boat", 2),
-//     ]
-//     renderShips(element, ships);
-//     return ships;
-// }
-
-// function renderShips(element, ships) {
-//     element.innerHTML = "";
-
-//     ships.forEach((ship, shipIndex) => {
-//         if (ship.shipPlaced === false) {
-//             let shipElement = document.createElement("div");
-//             shipElement.innerText = ship.shipName;
-//             shipElement.classList.add("ship-element");
-//             element.appendChild(shipElement);
-//             shipElement.setAttribute('draggable', true);
-//             shipElement.addEventListener("dragstart", (e) => shipDragStart(e, shipIndex));
-//         }
-//     })
-// }
-
 function shipDragStart(e, shipIndex) {
     console.log("dragstart");
     console.log(shipIndex);
     e.dataTransfer.clearData();
-    // e.dataTransfer.setData("text/plain", e.shipElement);
     e.dataTransfer.setData("ship", shipIndex);
 }
 
 function shipDrop(e, tileIndex, ship, gameBoardObject) {
-    // console.log(ship);
-    // console.log(gameBoardObject);
     let tileObject = gameBoardObject.myBoard[tileIndex];
     console.log(tileObject);
     tileObject.ship = ship;
