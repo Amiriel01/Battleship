@@ -9,7 +9,7 @@ let player = (rootElement, playerName) => {
         orientation: "Horizontal",
         playerName: playerName,
         ships: [],
-        gameBoard: gameBoard(),
+        gameBoard: createGameBoard(),
         flipOrientation: function () {
             if (this.orientation === "Horizontal") {
                 this.orientation = "Vertical";
@@ -54,7 +54,7 @@ let player = (rootElement, playerName) => {
                 tile.addEventListener("dragleave", (e) => this.gridLeaveHover(e));
 
                 tile.addEventListener("drop", (event) => {
-                    console.log("drop");
+                    // console.log("drop");
                     event.preventDefault();
                     this.shipDrop(event, tileIndex, this.getShip(event, this.ships));
                     this.renderShips(shipBank, this.ships);
@@ -68,7 +68,7 @@ let player = (rootElement, playerName) => {
             e.dataTransfer.effectAllowed = "all";
             e.dataTransfer.setData("ship", shipIndex);
             this.shipDragCurrent = shipIndex;
-            console.log(shipIndex)
+            // console.log(shipIndex)
         },
 
         shipDrop(e, tileIndex, ship) {
@@ -83,6 +83,7 @@ let player = (rootElement, playerName) => {
         gridHoverOver(e, tileIndex, gameBoard) {
             e.preventDefault();
             let ship = this.ships[this.shipDragCurrent];
+
             //this will make sure all the valid tiles are highlighted//
             // console.log(ship)
             this.getValidTiles(e, tileIndex, ship, gameBoard).forEach((tile) => {
@@ -91,10 +92,18 @@ let player = (rootElement, playerName) => {
         },
 
         getValidTiles(e, tileIndex, ship, gameBoard) {
-            // console.log(ship);
+
             let startIndex = tileIndex;
             let endIndex = startIndex + ship.shipLength;
+            console.log(ship.shipLength);
             console.log(this.orientation);
+            console.log(startIndex)
+            console.log(endIndex)
+
+            if (ship.shipLength === 5 && ship.shipLength / 2 !== 0 || ship.shipLength === 4 && startIndex >= 8 || ship.shipLength === 3 && startIndex >= 9 || ship.shipLength === 2 && startIndex === 10) {
+                // return gameBoard.myBoard.slice(startIndex, endIndex);
+                return false
+            }
 
             return gameBoard.myBoard.slice(startIndex, endIndex);
         },
@@ -110,7 +119,7 @@ let player = (rootElement, playerName) => {
             //get data called ship, expect ship to be a number(index) and this number represents where in the array the ship is and it will return the ship object//
 
             let shipIndex = e.dataTransfer.getData("ship");
-            console.log(shipIndex)
+            // console.log(shipIndex)
             return ships[parseInt(shipIndex)];
         },
 
