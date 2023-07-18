@@ -1,5 +1,5 @@
 import { createShip } from "./ships"
-import { shipDragStart, createGrids, gameBoard } from "./gameboard";
+import { shipDragStart, createGrids, createGameBoard } from "./gameboard";
 
 
 let player = (rootElement, playerName) => {
@@ -95,8 +95,8 @@ let player = (rootElement, playerName) => {
             let startIndex = tileIndex;
             let endIndex = startIndex + ship.shipLength;
             console.log(this.orientation);
+
             return gameBoard.myBoard.slice(startIndex, endIndex);
-        
         },
 
         gridLeaveHover(e) {

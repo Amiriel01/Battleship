@@ -1,6 +1,6 @@
 import { renderShips } from "./player";
 
-let gameBoard = () => {
+let createGameBoard = () => {
     return {
         player1Board: {},
         player2Board: {},
@@ -79,6 +79,6 @@ function createGrids(gridElement, gameBoardObject) {
 }
 
 export {
-    gameBoard,
+    createGameBoard,
     createGrids,
 };
