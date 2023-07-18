@@ -88,23 +88,55 @@ let player = (rootElement, playerName) => {
             // console.log(ship)
             this.getValidTiles(e, tileIndex, ship, gameBoard).forEach((tile) => {
                 tile.tile.classList.add("ship-hover-marker");
-            })
+            });
         },
 
         getValidTiles(e, tileIndex, ship, gameBoard) {
-
+            let tile = gameBoard.myBoard[tileIndex];
+            console.log(tile);
             let startIndex = tileIndex;
             let endIndex = startIndex + ship.shipLength;
-            console.log(ship.shipLength);
-            console.log(this.orientation);
-            console.log(startIndex)
-            console.log(endIndex)
+            let offset = 0;
 
-            if (ship.shipLength === 5 && ship.shipLength / 2 !== 0 || ship.shipLength === 4 && startIndex >= 8 || ship.shipLength === 3 && startIndex >= 9 || ship.shipLength === 2 && startIndex === 10) {
-                // return gameBoard.myBoard.slice(startIndex, endIndex);
-                return false
-            }
+            if (this.orientation === "Horizontal") {
+                let endRow = Math.floor(endIndex / 10);
+                if (endRow > tile.row) {
+                    offset = endIndex % 10;
+                    console.log(offset);
+                }
+            } else {
+                let returnTiles = [];
+                let startRow = Math.floor(startIndex / 10);
+                let endRow = startRow + ship.shipLength;
+                if (endRow > 10) {
+                    offset = endRow -10;
+                    startRow = startRow - offset;
+                    endRow = endRow - offset;
+                }
+                let columnValue = startIndex % 10;
+                for (let i = 0; i < ship.shipLength; i++) {
+                    let indexToGrab = (i * 10) + (startRow * 10) + columnValue;
+                    console.log(indexToGrab)
+                    returnTiles.push(gameBoard.myBoard[indexToGrab]);
+                }
+                return returnTiles;
+            } 
 
+            startIndex = startIndex - offset;
+            endIndex = endIndex - offset;
+            // let decimalValue = ((startIndex % 10) - Math.floor(startIndex));
+
+            // console.log(ship.shipLength);
+            // console.log(this.orientation);
+            // console.log(startIndex);
+            // console.log(endIndex);
+
+            // if (ship.shipLength === 5 && decimalValue === .6 && startIndex <= 95 || ship.shipLength === 4 && decimalValue === .7 && startIndex <= 96 || ship.shipLength === 3 && decimalValue === .8 && startIndex <= 97 || ship.shipLength === 2 && decimalValue === .9 && startIndex <= 98) {
+            //     // console.log(decimalValue);
+            //     return gameBoard.myBoard.slice(startIndex, endIndex);
+            // } else {
+            //     return [];
+            // }
             return gameBoard.myBoard.slice(startIndex, endIndex);
         },
 
