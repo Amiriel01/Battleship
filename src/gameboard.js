@@ -2,15 +2,15 @@ import { renderShips } from "./player";
 
 let createGameBoard = () => {
     return {
-        player1Board: {},
-        player2Board: {},
+        // player1Board: {},
+        // player2Board: {},
 
         myBoard: [],
         enemyBoard: [],
 
         recieveAttack: function (player, row, column) {
             //which board is being used//
-            let board = player === 1 ? this.player1Board : this.player2Board
+            // let board = player === 1 ? this.myBoard : this.enemyBoard
             //check if a shot has been fired//
             //if shot has been fired already there then do nothing//
             let alreadyFired = this.shotFired(player, row, column);
@@ -18,33 +18,41 @@ let createGameBoard = () => {
                 return;
             }
             //record value of shot in gameboard for player//
-            if (!board[row]) {
-                board[row] = {}
+            if (tile.ship === true) {
+                isHit = true;
+            } else if (tile.ship === false) {
+                isMiss = true;
+            } else {
+                return null;
             }
+            // if (!board[row]) {
+            //     board[row] = {}
+            // }
         },
 
         shotFired: function (player, row, column) {
             //if player = 1 ?(is true/false) true take option 1 and false take option 2//
-            let board = player === 1 ? this.player1Board : this.player2Board
-            // longer way to write it
-            // let board;
-            // if (player === 1) {
-            //     board = this.player1Board;
-            // } else {
-            //     board = this.player2Board;
-            // }
+            let board = player === 1 ? this.myBoard : this.enemyBoard
+            
             if (board[row]) {
                 if (board[row][column]) {
                     let value = board[row][column];
                     return value;
                 }
             }
+
             return null;
-        }
+        },
+
     };
 }
 
 let createTile = (gridTile, row, column) => {
+    gridTile.addEventListener("click", () => {
+        console.log(row, column);
+        
+        
+    })
     return {
         //tile is the element tile in the DOM created for the grid (it's what you hover over)//
         tile: gridTile,
@@ -75,7 +83,9 @@ function createGrids(gridElement, gameBoardObject) {
             gameBoardObject.myBoard.push(myGridTile);
             gameBoardObject.enemyBoard.push(enemyGridTile);
         }
+
     }
+
 }
 
 export {

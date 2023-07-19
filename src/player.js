@@ -1,5 +1,5 @@
 import { createShip } from "./ships"
-import { shipDragStart, createGrids, createGameBoard } from "./gameboard";
+import { createGrids, createGameBoard } from "./gameboard";
 
 
 let player = (rootElement, playerName) => {
@@ -59,7 +59,11 @@ let player = (rootElement, playerName) => {
                     this.shipDrop(event, tileIndex, this.getShip(event, this.ships));
                     this.renderShips(shipBank, this.ships);
                 })
+
+               
             })
+
+            
         },
 
         shipDragStart(e, shipIndex) {
@@ -93,7 +97,7 @@ let player = (rootElement, playerName) => {
 
         getValidTiles(e, tileIndex, ship, gameBoard) {
             let tile = gameBoard.myBoard[tileIndex];
-            console.log(tile);
+            // console.log(tile);
             let startIndex = tileIndex;
             let endIndex = startIndex + ship.shipLength;
             let offset = 0;
@@ -109,7 +113,7 @@ let player = (rootElement, playerName) => {
                 let startRow = Math.floor(startIndex / 10);
                 let endRow = startRow + ship.shipLength;
                 if (endRow > 10) {
-                    offset = endRow -10;
+                    offset = endRow - 10;
                     startRow = startRow - offset;
                     endRow = endRow - offset;
                 }
@@ -120,7 +124,7 @@ let player = (rootElement, playerName) => {
                     returnTiles.push(gameBoard.myBoard[indexToGrab]);
                 }
                 return returnTiles;
-            } 
+            }
 
             startIndex = startIndex - offset;
             endIndex = endIndex - offset;
@@ -155,33 +159,37 @@ let player = (rootElement, playerName) => {
             return ships[parseInt(shipIndex)];
         },
 
-        createShips(element) {
-            let ships = [
-                createShip("Carrier", 5),
-                createShip("Battleship", 4),
-                createShip("Submarine", 3),
-                createShip("Destroyer", 3),
-                createShip("Patrol Boat", 2),
-            ]
-            this.renderShips(element, ships);
-            return ships;
-        },
+        
 
-        renderShips(element, ships) {
-            element.innerHTML = "";
+            createShips(element) {
+        let ships = [
+            createShip("Carrier", 5),
+            createShip("Battleship", 4),
+            createShip("Submarine", 3),
+            createShip("Destroyer", 3),
+            createShip("Patrol Boat", 2),
+        ]
+        this.renderShips(element, ships);
+        return ships;
+    },
 
-            ships.forEach((ship, shipIndex) => {
-                if (ship.shipPlaced === false) {
-                    let shipElement = document.createElement("div");
-                    shipElement.innerText = ship.shipName;
-                    shipElement.classList.add("ship-element");
-                    element.appendChild(shipElement);
-                    shipElement.setAttribute('draggable', true);
-                    shipElement.addEventListener("dragstart", (e) => this.shipDragStart(e, shipIndex));
-                }
-            })
-        }
-    }
+    renderShips(element, ships) {
+        element.innerHTML = "";
+
+        ships.forEach((ship, shipIndex) => {
+            if (ship.shipPlaced === false) {
+                let shipElement = document.createElement("div");
+                shipElement.innerText = ship.shipName;
+                shipElement.classList.add("ship-element");
+                element.appendChild(shipElement);
+                shipElement.setAttribute('draggable', true);
+                shipElement.addEventListener("dragstart", (e) => this.shipDragStart(e, shipIndex));
+            }
+        })
+    },
+
+
+}
 }
 
 
