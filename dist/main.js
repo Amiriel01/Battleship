@@ -52,51 +52,54 @@ let createGameBoard = () => {
         myBoard: [],
         enemyBoard: [],
 
-        recieveAttack: function (player, row, column) {
+        recieveAttack: function (player, tileIndex) {
             //which board is being used//
             // let board = player === 1 ? this.myBoard : this.enemyBoard
             //check if a shot has been fired//
             //if shot has been fired already there then do nothing//
-            let alreadyFired = this.shotFired(player, row, column);
-            if (alreadyFired === null) {
+            let alreadyFired = this.shotFired(player, tileIndex);
+            
+            let board = player === 1 ? this.myBoard : this.enemyBoard
+
+            let tile = board[tileIndex];
+
+            console.log(tileIndex)
+            if (alreadyFired) {
                 return;
             }
             //record value of shot in gameboard for player//
-            if (tile.ship === true) {
-                isHit = true;
-            } else if (tile.ship === false) {
-                isMiss = true;
+            if (tile.ship) {
+                tile.isHit = true;
+                tile.ship.hit();
+                tile.tile.classList.add("hit");
+
+                if (tile.ship.isSunk()) {
+                    console.log("Ship is Sunk!");
+                }
             } else {
-                return null;
-            }
+                tile.isMiss = true;
+                tile.tile.classList.add("miss");
+            } 
+        
             // if (!board[row]) {
             //     board[row] = {}
             // }
         },
 
-        shotFired: function (player, row, column) {
+        shotFired: function (player, tileIndex) {
             //if player = 1 ?(is true/false) true take option 1 and false take option 2//
             let board = player === 1 ? this.myBoard : this.enemyBoard
-            
-            if (board[row]) {
-                if (board[row][column]) {
-                    let value = board[row][column];
-                    return value;
-                }
-            }
 
-            return null;
+            let tile = board[tileIndex];
+
+           return tile.isHit === true || tile.isMiss === true;
         },
 
     };
 }
 
 let createTile = (gridTile, row, column) => {
-    gridTile.addEventListener("click", () => {
-        console.log(row, column);
-        
-        
-    })
+  
     return {
         //tile is the element tile in the DOM created for the grid (it's what you hover over)//
         tile: gridTile,
@@ -126,6 +129,14 @@ function createGrids(gridElement, gameBoardObject) {
             let enemyGridTile = createTile(tile, r, c);
             gameBoardObject.myBoard.push(myGridTile);
             gameBoardObject.enemyBoard.push(enemyGridTile);
+            tile.addEventListener("click", () => {
+                // let clickLocation = [r, c];
+                
+                let tileIndex = (r * 10) + c;
+                // console.log(clickLocation)
+                gameBoardObject.recieveAttack(1, tileIndex);
+                
+            })
         }
 
     }
