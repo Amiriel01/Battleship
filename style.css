@@ -101,3 +101,11 @@ p {
 .ship-here {
     background-color: blue;
 }
+
+.hit {
+    background-color: red;
+}
+
+.miss {
+    background-color: green;
+}
