@@ -29,7 +29,7 @@ let instance = null;
     instance = {
         player1: (0,_player__WEBPACK_IMPORTED_MODULE_0__.player)(document.getElementById("player1-controls"), "player1"),
         player2: (0,_player__WEBPACK_IMPORTED_MODULE_0__.player)(document.getElementById("player2-controls"), "player2"),
-        turn: 1,
+        turn: 2,
         
 
         initialize: function () {
