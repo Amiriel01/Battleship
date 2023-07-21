@@ -36,13 +36,20 @@ let createGameBoard = () => {
                 tile.isHit = true;
                 tile.ship.hit();
                 tile.tile.classList.add("hit");
+                document.querySelector("#instructions").style.color = "#FF003F";
+                document.querySelector("#instructions").innerText = "You hit a ship!"
+
 
                 if (tile.ship.isSunk()) {
+                    // document.querySelector("#instructions").innerText = "You sunk a ship!"
                     console.log("Ship is Sunk!");
                 }
             } else {
                 tile.isMiss = true;
                 tile.tile.classList.add("miss");
+                document.querySelector("#instructions").style.color = "#047fb0";
+                document.querySelector("#instructions").innerText = "You missed the ships."
+
             }
 
             // if (!board[row]) {
@@ -96,7 +103,8 @@ function createGrids(gridElement, gameBoardObject, player) {
             tile.addEventListener("click", () => {
                 let tileIndex = (r * 10) + c;
                 if (!gameManager().canStartGame()) {
-                    alert("place all boats on the boards");
+                    document.querySelector("#instructions").style.color = "#FF4500";
+                    document.querySelector("#instructions").innerText = "Place all ships on the boards before starting the game!"
                     return;
                 } else {
                     gameManager().recieveAttackGame(tileIndex);
@@ -113,10 +121,10 @@ function createGrids(gridElement, gameBoardObject, player) {
 }
 
 function playAgain() {
-    document.querySelector("#play-again").addEventListener("click", function() {
+    document.querySelector("#play-again").addEventListener("click", function () {
         document.location.reload();
     })
-    
+
 }
 
 export {

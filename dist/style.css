@@ -3,16 +3,33 @@
     padding: 0;
 }
 
+body {
+    background-image: url(images/ocean1.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
 #title {
     font-size: 96px;
     font-weight: bold;
     text-align: center;
+    color: #064273;
+    text-shadow: -1px 1px 2px #7fcdff,
+				  1px 1px 2px #7fcdff,
+				  1px -1px 0  #7fcdff,
+				  -1px -1px 0 #7fcdff;
 }
 
 #instructions {
     font-size: 64px;
     font-weight: bold;
     text-align: center;
+    color: #064273;
+    text-shadow: -1px 1px 2px #7fcdff,
+				  1px 1px 2px #7fcdff,
+				  1px -1px 0  #7fcdff,
+				  -1px -1px 0 #7fcdff;
 }
 
 .player-buttons {
@@ -20,14 +37,14 @@
     justify-content: center;
     margin-top: 2rem;
     gap: 5rem;
+    
 }
 
 .gameboards-controls {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     margin-top: 2rem;
     align-items: center;
-    
 }
 
 .controls {
@@ -39,38 +56,66 @@
 }
 
 .gameboard-title {
-    font-size: 36px;
+    font-size: 48px;
     font-weight: bold;
     margin-bottom: 2rem;
+    color: #064273;
+    text-decoration: underline;
+    text-shadow: -1px 1px 2px #7fcdff,
+				  1px 1px 2px #7fcdff,
+				  1px -1px 0  #7fcdff,
+				  -1px -1px 0 #7fcdff;
 }
 
 p {
     font-size: 24px;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+    color: #7fcdff;
 }
 
-#ship-options
-{
-    border: 5px solid purple;
-    margin-top: 2rem;
-    height: 10rem;
-    padding-top: 1rem;
+#ship-options {
+    border: 2px solid rgb(141, 238, 170);
+    margin-top: 1rem;
+    height: 7rem;
+    padding-top: .5rem;
+    font-size: 18px;
+    font-weight: bold;
+    color: #064273;
+    text-shadow: -1px 1px 2px #7fcdff,
+				  1px 1px 2px #7fcdff,
+				  1px -1px 0  #7fcdff,
+				  -1px -1px 0 #7fcdff;
+}
+
+.ship-options2 {
+    border: 2px solid rgb(128,128,0) !important;
 }
 
 #player1-gameboard {
     height: 500px;
     width: 500px;
-    border: 5px solid green;
-    margin-right: 1rem;
-    
+    border: 5px solid rgb(141, 238, 170);
+    margin-right: 2rem;
+}
+
+#player1-controls {
+    background-color: rgb(141, 238, 170, .1);
+    padding: 1rem;
+    border: 2px solid rgb(141, 238, 170);
 }
 
 #player2-gameboard {
     height: 500px;
     width: 500px;
-    border: 5px solid blue;
-    margin-left: 1rem;
+    border: 5px solid rgb(128,128,0);
+    margin-left: 2rem;
+}
+
+#player2-controls {
+    background-color: rgb(128,128,0,.1);
+    padding: 2rem;
+    border: 2px solid rgb(128,128,0);
 }
 
 .reset-game {
@@ -79,18 +124,19 @@ p {
    justify-content: center;
 }
 
-
-
 #player1-gameboard,
 #player2-gameboard {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
+    background-image: url(images/sonar1.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
 .tile {
     border: 1px solid black;
 }
-
 
 .ship-element {
    z-index: 0;
@@ -102,13 +148,32 @@ p {
 }
 
 .ship-here {
-    background-color: blue;
+    background-color: #899499;
 }
 
 .hit {
-    background-color: red;
+    background-color: #FF003F;
 }
 
 .miss {
-    background-color: green;
+    background-color: #047fb0;
+}
+
+button {
+    padding: .5rem;
+    background-color: #064273;
+    color: #7fcdff;
+    font-weight: bold;
+}
+
+.ship-text {
+    color: #7fcdff;
+    font-weight: bold;
+}
+
+#ship-orientation-title {
+    margin-top: 1rem;
+    color: #7fcdff;
+    font-weight: bold;
+    margin-bottom: 1rem;
 }
