@@ -2,9 +2,12 @@
 import { createGrids, dragDropInitializer, createGameBoard } from "./gameboard";
 import gameManager from "./game-manager";
 import { createShips } from "./player";
+import { playAgain } from "./gameboard";
 
 gameManager()
     .initialize();
+
+playAgain();
 
 
 

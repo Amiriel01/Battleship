@@ -114,7 +114,8 @@ let instance = null;
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   createGameBoard: () => (/* binding */ createGameBoard),
-/* harmony export */   createGrids: () => (/* binding */ createGrids)
+/* harmony export */   createGrids: () => (/* binding */ createGrids),
+/* harmony export */   playAgain: () => (/* binding */ playAgain)
 /* harmony export */ });
 /* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ "./src/player.js");
 /* harmony import */ var _ships__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ships */ "./src/ships.js");
@@ -231,6 +232,13 @@ function createGrids(gridElement, gameBoardObject, player) {
 
     }
 
+}
+
+function playAgain() {
+    document.querySelector("#play-again").addEventListener("click", function() {
+        document.location.reload();
+    })
+    
 }
 
 
@@ -571,8 +579,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 (0,_game_manager__WEBPACK_IMPORTED_MODULE_1__["default"])()
     .initialize();
+
+(0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.playAgain)();
 
 
 

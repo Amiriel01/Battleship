@@ -73,11 +73,13 @@ p {
     margin-left: 1rem;
 }
 
-#reset-game {
+.reset-game {
     display: flex;
     margin-top: 1rem;
    justify-content: center;
 }
+
+
 
 #player1-gameboard,
 #player2-gameboard {
@@ -96,7 +98,7 @@ p {
 
 .ship-hover-marker {
     background-color: aquamarine;
-    
+
 }
 
 .ship-here {
