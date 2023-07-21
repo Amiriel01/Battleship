@@ -1,4 +1,8 @@
 import { renderShips } from "./player";
+import { createShip } from "./ships";
+// import { startGame } from "./game-manager";
+// import { player } from "./player";
+import gameManager from "./game-manager";
 
 let createGameBoard = () => {
     return {
@@ -8,13 +12,17 @@ let createGameBoard = () => {
         myBoard: [],
         enemyBoard: [],
 
+
+
         recieveAttack: function (player, tileIndex) {
             //which board is being used//
             // let board = player === 1 ? this.myBoard : this.enemyBoard
             //check if a shot has been fired//
             //if shot has been fired already there then do nothing//
+            // startGame();
+
             let alreadyFired = this.shotFired(player, tileIndex);
-            
+
             let board = player === 1 ? this.myBoard : this.enemyBoard
 
             let tile = board[tileIndex];
@@ -35,8 +43,8 @@ let createGameBoard = () => {
             } else {
                 tile.isMiss = true;
                 tile.tile.classList.add("miss");
-            } 
-        
+            }
+
             // if (!board[row]) {
             //     board[row] = {}
             // }
@@ -48,14 +56,14 @@ let createGameBoard = () => {
 
             let tile = board[tileIndex];
 
-           return tile.isHit === true || tile.isMiss === true;
+            return tile.isHit === true || tile.isMiss === true;
         },
 
     };
 }
 
 let createTile = (gridTile, row, column) => {
-  
+
     return {
         //tile is the element tile in the DOM created for the grid (it's what you hover over)//
         tile: gridTile,
@@ -73,7 +81,7 @@ let createTile = (gridTile, row, column) => {
 
 }
 
-function createGrids(gridElement, gameBoardObject) {
+function createGrids(gridElement, gameBoardObject, player) {
 
     for (let r = 0; r < 10; r++) {
 
@@ -86,12 +94,17 @@ function createGrids(gridElement, gameBoardObject) {
             gameBoardObject.myBoard.push(myGridTile);
             gameBoardObject.enemyBoard.push(enemyGridTile);
             tile.addEventListener("click", () => {
-                // let clickLocation = [r, c];
-                
                 let tileIndex = (r * 10) + c;
+                if (!gameManager().canStartGame()) {
+                    alert("place all boats on the boards");
+                    return;
+                } else {
+                    gameManager().recieveAttackGame(tileIndex);
+                }
+
+                // let clickLocation = [r, c];
                 // console.log(clickLocation)
-                gameBoardObject.recieveAttack(1, tileIndex);
-                
+
             })
         }
 

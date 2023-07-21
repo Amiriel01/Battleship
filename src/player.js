@@ -1,8 +1,10 @@
 import { createShip } from "./ships"
 import { createGrids, createGameBoard } from "./gameboard";
+import gameManager from "./game-manager";
 
 
 let player = (rootElement, playerName) => {
+
     return {
         root: rootElement,
         shipDragCurrent: null,
@@ -21,7 +23,7 @@ let player = (rootElement, playerName) => {
         initialize: function () {
             this.bindOrientationButton();
             this.ships = this.createShips(this.root.querySelector("#ship-options"));
-            createGrids(this.getGameBoard(), this.gameBoard);
+            createGrids(this.getGameBoard(), this.gameBoard, this);
             this.dragDropInitializer();
         },
 
@@ -59,11 +61,7 @@ let player = (rootElement, playerName) => {
                     this.shipDrop(event, tileIndex, this.getShip(event, this.ships));
                     this.renderShips(shipBank, this.ships);
                 })
-
-               
             })
-
-            
         },
 
         shipDragStart(e, shipIndex) {
@@ -76,12 +74,17 @@ let player = (rootElement, playerName) => {
         },
 
         shipDrop(e, tileIndex, ship) {
+
             ship.shipPlaced = true;
             this.getValidTiles(e, tileIndex, ship, this.gameBoard).forEach((tile) => {
                 //places ship on multiple tiles, not just one tile//
                 tile.ship = ship;
                 tile.tile.classList.add("ship-here");
             })
+            let allShipsPlaced = this.ships.filter((ship) => ship.shipPlaced).length === 5;
+            if (allShipsPlaced) {
+                gameManager().hideShips();
+            }
         },
 
         gridHoverOver(e, tileIndex, gameBoard) {
@@ -106,7 +109,7 @@ let player = (rootElement, playerName) => {
                 let endRow = Math.floor(endIndex / 10);
                 if (endRow > tile.row) {
                     offset = endIndex % 10;
-                    console.log(offset);
+                    // console.log(offset);
                 }
             } else {
                 let returnTiles = [];
@@ -120,7 +123,7 @@ let player = (rootElement, playerName) => {
                 let columnValue = startIndex % 10;
                 for (let i = 0; i < ship.shipLength; i++) {
                     let indexToGrab = (i * 10) + (startRow * 10) + columnValue;
-                    console.log(indexToGrab)
+                    // console.log(indexToGrab)
                     returnTiles.push(gameBoard.myBoard[indexToGrab]);
                 }
                 return returnTiles;
@@ -159,37 +162,35 @@ let player = (rootElement, playerName) => {
             return ships[parseInt(shipIndex)];
         },
 
-        
-
-            createShips(element) {
-        let ships = [
-            createShip("Carrier", 5),
-            createShip("Battleship", 4),
-            createShip("Submarine", 3),
-            createShip("Destroyer", 3),
-            createShip("Patrol Boat", 2),
-        ]
-        this.renderShips(element, ships);
-        return ships;
-    },
-
-    renderShips(element, ships) {
-        element.innerHTML = "";
-
-        ships.forEach((ship, shipIndex) => {
-            if (ship.shipPlaced === false) {
-                let shipElement = document.createElement("div");
-                shipElement.innerText = ship.shipName;
-                shipElement.classList.add("ship-element");
-                element.appendChild(shipElement);
-                shipElement.setAttribute('draggable', true);
-                shipElement.addEventListener("dragstart", (e) => this.shipDragStart(e, shipIndex));
-            }
-        })
-    },
 
 
-}
+        createShips(element) {
+            let ships = [
+                createShip("Carrier", 5),
+                createShip("Battleship", 4),
+                createShip("Submarine", 3),
+                createShip("Destroyer", 3),
+                createShip("Patrol Boat", 2),
+            ]
+            this.renderShips(element, ships);
+            return ships;
+        },
+
+        renderShips(element, ships) {
+            element.innerHTML = "";
+
+            ships.forEach((ship, shipIndex) => {
+                if (ship.shipPlaced === false) {
+                    let shipElement = document.createElement("div");
+                    shipElement.innerText = ship.shipName;
+                    shipElement.classList.add("ship-element");
+                    element.appendChild(shipElement);
+                    shipElement.setAttribute('draggable', true);
+                    shipElement.addEventListener("dragstart", (e) => this.shipDragStart(e, shipIndex));
+                }
+            })
+        },
+    }
 }
 
 
