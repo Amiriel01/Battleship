@@ -94,8 +94,11 @@ let player = (rootElement, playerName) => {
             //this will make sure all the valid tiles are highlighted//
             // console.log(ship)
             this.getValidTiles(e, tileIndex, ship, gameBoard).forEach((tile) => {
-                tile.tile.classList.add("ship-hover-marker");
-            });
+                tile.tile.classList.add("ship-hover-marker")
+                setTimeout(function() {
+                    tile.tile.classList.remove("ship-hover-marker");
+                }, 500);
+            })
         },
 
         getValidTiles(e, tileIndex, ship, gameBoard) {
