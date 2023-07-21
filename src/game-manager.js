@@ -12,7 +12,7 @@ export default () => {
     instance = {
         player1: player(document.getElementById("player1-controls"), "player1"),
         player2: player(document.getElementById("player2-controls"), "player2"),
-        turn: 1,
+        turn: 2,
         
 
         initialize: function () {
