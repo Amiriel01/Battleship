@@ -3,6 +3,4 @@ Work in Progress
 
 Credits:
 
-Ocean Image: Pexels.com Author: Richard Wilson
-
-Sonar Image: https://www.istockphoto.com/
+Sonar and Ocean Images: https://www.istockphoto.com/

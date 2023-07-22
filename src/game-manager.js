@@ -52,7 +52,7 @@ export default () => {
             let player = this.getPlayerTurnObject();
             player.gameBoard.recieveAttack(1, tileIndex);
             this.alternateTurns();
-            console.log(this.turn)
+            // console.log(this.turn)
         },
 
         canStartGame: function () {
