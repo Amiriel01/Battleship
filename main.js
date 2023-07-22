@@ -69,7 +69,7 @@ let instance = null;
             let player = this.getPlayerTurnObject();
             player.gameBoard.recieveAttack(1, tileIndex);
             this.alternateTurns();
-            console.log(this.turn)
+            // console.log(this.turn)
         },
 
         canStartGame: function () {
@@ -149,7 +149,7 @@ let createGameBoard = () => {
 
             let tile = board[tileIndex];
 
-            console.log(tileIndex)
+            // console.log(tileIndex)
             if (alreadyFired) {
                 return;
             }
@@ -160,12 +160,25 @@ let createGameBoard = () => {
                 tile.tile.classList.add("hit");
                 document.querySelector("#instructions").style.color = "#FF003F";
                 document.querySelector("#instructions").innerText = "You hit a ship!"
-
+                // tile.ship.isSunk().count = 0;
 
                 if (tile.ship.isSunk()) {
-                    // document.querySelector("#instructions").innerText = "You sunk a ship!"
-                    console.log("Ship is Sunk!");
+                    let i = board.tile.ship.isSunk();
+                    for (let i = 0; i < 5; i++) {
+                        console.log(i)
+                    }
+                    // let shipSunk = 0;
+                    // this.tile.ship.isSunk() {
+                    //     shipSunk++;
+                    //     console.log(shipSunk)
+                    // }
+                    
+                    // tile.ship.isSunk().count = (tile.ship.isSunk().count) += 1;
+                    // console.log("Ship is Sunk!");
+                    // console.log(tile.ship.isSunk.count);
                 }
+
+                
             } else {
                 tile.isMiss = true;
                 tile.tile.classList.add("miss");
