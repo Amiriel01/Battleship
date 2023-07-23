@@ -52,6 +52,7 @@ export default () => {
             let player = this.getPlayerTurnObject();
             player.gameBoard.recieveAttack(1, tileIndex);
             this.alternateTurns();
+            this.allSunk();
             // console.log(this.turn)
         },
 
@@ -68,6 +69,19 @@ export default () => {
             this.player2.getGameBoard().querySelectorAll(".ship-here").forEach(element => {
                 element.classList.remove("ship-here");
             });
+        },
+
+        allSunk: function () {
+            let player1ShipsSunk = this.player1.ships.every((ship) => ship.isSunk())
+            let player2ShipsSunk = this.player2.ships.every((ship) => ship.isSunk())
+
+            if (player1ShipsSunk) {
+                document.querySelector("#instructions").style.color = "#ff0080";
+                document.querySelector("#instructions").innerText = "Player 2 Wins!";
+            } else if (player2ShipsSunk) {
+                document.querySelector("#instructions").style.color = "#ff0080";
+                document.querySelector("#instructions").innerText = "Player 1 Wins!";
+            }
         },
     };
     return instance;

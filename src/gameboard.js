@@ -12,8 +12,6 @@ let createGameBoard = () => {
         myBoard: [],
         enemyBoard: [],
 
-
-
         recieveAttack: function (player, tileIndex) {
             //which board is being used//
             // let board = player === 1 ? this.myBoard : this.enemyBoard
@@ -41,34 +39,17 @@ let createGameBoard = () => {
                 // tile.ship.isSunk().count = 0;
 
                 if (tile.ship.isSunk()) {
-                    let i = board.tile.ship.isSunk();
-                    for (let i = 0; i < 5; i++) {
-                        console.log(i)
-                    }
-                    // let shipSunk = 0;
-                    // this.tile.ship.isSunk() {
-                    //     shipSunk++;
-                    //     console.log(shipSunk)
-                    // }
-                    
-                    // tile.ship.isSunk().count = (tile.ship.isSunk().count) += 1;
-                    // console.log("Ship is Sunk!");
-                    // console.log(tile.ship.isSunk.count);
+                    console.log("Ship is Sunk!");
+                    console.log(tile.ship.isSunk())
                 }
-
-                
             } else {
                 tile.isMiss = true;
                 tile.tile.classList.add("miss");
                 document.querySelector("#instructions").style.color = "#047fb0";
                 document.querySelector("#instructions").innerText = "You missed the ships."
-
             }
-
-            // if (!board[row]) {
-            //     board[row] = {}
-            // }
         },
+        
 
         shotFired: function (player, tileIndex) {
             //if player = 1 ?(is true/false) true take option 1 and false take option 2//
@@ -78,7 +59,6 @@ let createGameBoard = () => {
 
             return tile.isHit === true || tile.isMiss === true;
         },
-
     };
 }
 
@@ -144,4 +124,5 @@ export {
     createGameBoard,
     createGrids,
     playAgain,
+   
 };

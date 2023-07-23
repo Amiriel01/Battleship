@@ -25,6 +25,7 @@ let player = (rootElement, playerName) => {
             this.ships = this.createShips(this.root.querySelector("#ship-options"));
             createGrids(this.getGameBoard(), this.gameBoard, this);
             this.dragDropInitializer();
+            this.bindRandomizeShipsButton();
         },
 
         bindOrientationButton: function () {
@@ -32,6 +33,13 @@ let player = (rootElement, playerName) => {
             button.addEventListener("click", () => {
                 this.flipOrientation();
                 button.innerText = this.orientation;
+            });
+        },
+
+        bindRandomizeShipsButton: function () {
+            let button = this.root.querySelector(".randomize-button");
+            button.addEventListener("click", () => {
+                this.randomizeShips();
             });
         },
 
@@ -74,9 +82,11 @@ let player = (rootElement, playerName) => {
         },
 
         shipDrop(e, tileIndex, ship) {
-
+            if (e) {
+                e.preventDefault();
+            }
             ship.shipPlaced = true;
-            this.getValidTiles(e, tileIndex, ship, this.gameBoard).forEach((tile) => {
+            this.getValidTiles(tileIndex, ship, this.gameBoard).forEach((tile) => {
                 //places ship on multiple tiles, not just one tile//
                 tile.ship = ship;
                 tile.tile.classList.add("ship-here");
@@ -87,13 +97,23 @@ let player = (rootElement, playerName) => {
             }
         },
 
+
+        randomizeShips() {
+            this.ships.forEach((ship) => {
+                let index = Math.floor(Math.random() * 100);
+                this.shipDrop(null, index, ship);
+            })
+            this.renderShips(this.root.querySelector("#ship-options"), this.ships);
+            
+        },
+
         gridHoverOver(e, tileIndex, gameBoard) {
             e.preventDefault();
             let ship = this.ships[this.shipDragCurrent];
 
             //this will make sure all the valid tiles are highlighted//
             // console.log(ship)
-            this.getValidTiles(e, tileIndex, ship, gameBoard).forEach((tile) => {
+            this.getValidTiles(tileIndex, ship, gameBoard).forEach((tile) => {
                 tile.tile.classList.add("ship-hover-marker")
                 setTimeout(function() {
                     tile.tile.classList.remove("ship-hover-marker");
@@ -101,12 +121,16 @@ let player = (rootElement, playerName) => {
             })
         },
 
-        getValidTiles(e, tileIndex, ship, gameBoard) {
+        getValidTiles(tileIndex, ship, gameBoard) {
             let tile = gameBoard.myBoard[tileIndex];
             // console.log(tile);
             let startIndex = tileIndex;
             let endIndex = startIndex + ship.shipLength;
             let offset = 0;
+
+            if (tile.ship !== null) {
+                //write code here//
+            }
 
             if (this.orientation === "Horizontal") {
                 let endRow = Math.floor(endIndex / 10);

@@ -69,6 +69,7 @@ let instance = null;
             let player = this.getPlayerTurnObject();
             player.gameBoard.recieveAttack(1, tileIndex);
             this.alternateTurns();
+            this.allSunk();
             // console.log(this.turn)
         },
 
@@ -85,6 +86,19 @@ let instance = null;
             this.player2.getGameBoard().querySelectorAll(".ship-here").forEach(element => {
                 element.classList.remove("ship-here");
             });
+        },
+
+        allSunk: function () {
+            let player1ShipsSunk = this.player1.ships.every((ship) => ship.isSunk())
+            let player2ShipsSunk = this.player2.ships.every((ship) => ship.isSunk())
+
+            if (player1ShipsSunk) {
+                document.querySelector("#instructions").style.color = "#ff0080";
+                document.querySelector("#instructions").innerText = "Player 2 Wins!";
+            } else if (player2ShipsSunk) {
+                document.querySelector("#instructions").style.color = "#ff0080";
+                document.querySelector("#instructions").innerText = "Player 1 Wins!";
+            }
         },
     };
     return instance;
@@ -134,8 +148,6 @@ let createGameBoard = () => {
         myBoard: [],
         enemyBoard: [],
 
-
-
         recieveAttack: function (player, tileIndex) {
             //which board is being used//
             // let board = player === 1 ? this.myBoard : this.enemyBoard
@@ -163,34 +175,17 @@ let createGameBoard = () => {
                 // tile.ship.isSunk().count = 0;
 
                 if (tile.ship.isSunk()) {
-                    let i = board.tile.ship.isSunk();
-                    for (let i = 0; i < 5; i++) {
-                        console.log(i)
-                    }
-                    // let shipSunk = 0;
-                    // this.tile.ship.isSunk() {
-                    //     shipSunk++;
-                    //     console.log(shipSunk)
-                    // }
-                    
-                    // tile.ship.isSunk().count = (tile.ship.isSunk().count) += 1;
-                    // console.log("Ship is Sunk!");
-                    // console.log(tile.ship.isSunk.count);
+                    console.log("Ship is Sunk!");
+                    console.log(tile.ship.isSunk())
                 }
-
-                
             } else {
                 tile.isMiss = true;
                 tile.tile.classList.add("miss");
                 document.querySelector("#instructions").style.color = "#047fb0";
                 document.querySelector("#instructions").innerText = "You missed the ships."
-
             }
-
-            // if (!board[row]) {
-            //     board[row] = {}
-            // }
         },
+        
 
         shotFired: function (player, tileIndex) {
             //if player = 1 ?(is true/false) true take option 1 and false take option 2//
@@ -200,7 +195,6 @@ let createGameBoard = () => {
 
             return tile.isHit === true || tile.isMiss === true;
         },
-
     };
 }
 
@@ -307,6 +301,7 @@ let player = (rootElement, playerName) => {
             this.ships = this.createShips(this.root.querySelector("#ship-options"));
             (0,_gameboard__WEBPACK_IMPORTED_MODULE_1__.createGrids)(this.getGameBoard(), this.gameBoard, this);
             this.dragDropInitializer();
+            this.bindRandomizeShipsButton();
         },
 
         bindOrientationButton: function () {
@@ -314,6 +309,13 @@ let player = (rootElement, playerName) => {
             button.addEventListener("click", () => {
                 this.flipOrientation();
                 button.innerText = this.orientation;
+            });
+        },
+
+        bindRandomizeShipsButton: function () {
+            let button = this.root.querySelector(".randomize-button");
+            button.addEventListener("click", () => {
+                this.randomizeShips();
             });
         },
 
@@ -356,9 +358,11 @@ let player = (rootElement, playerName) => {
         },
 
         shipDrop(e, tileIndex, ship) {
-
+            if (e) {
+                e.preventDefault();
+            }
             ship.shipPlaced = true;
-            this.getValidTiles(e, tileIndex, ship, this.gameBoard).forEach((tile) => {
+            this.getValidTiles(tileIndex, ship, this.gameBoard).forEach((tile) => {
                 //places ship on multiple tiles, not just one tile//
                 tile.ship = ship;
                 tile.tile.classList.add("ship-here");
@@ -369,13 +373,23 @@ let player = (rootElement, playerName) => {
             }
         },
 
+
+        randomizeShips() {
+            this.ships.forEach((ship) => {
+                let index = Math.floor(Math.random() * 100);
+                this.shipDrop(null, index, ship);
+            })
+            this.renderShips(this.root.querySelector("#ship-options"), this.ships);
+            
+        },
+
         gridHoverOver(e, tileIndex, gameBoard) {
             e.preventDefault();
             let ship = this.ships[this.shipDragCurrent];
 
             //this will make sure all the valid tiles are highlighted//
             // console.log(ship)
-            this.getValidTiles(e, tileIndex, ship, gameBoard).forEach((tile) => {
+            this.getValidTiles(tileIndex, ship, gameBoard).forEach((tile) => {
                 tile.tile.classList.add("ship-hover-marker")
                 setTimeout(function() {
                     tile.tile.classList.remove("ship-hover-marker");
@@ -383,12 +397,16 @@ let player = (rootElement, playerName) => {
             })
         },
 
-        getValidTiles(e, tileIndex, ship, gameBoard) {
+        getValidTiles(tileIndex, ship, gameBoard) {
             let tile = gameBoard.myBoard[tileIndex];
             // console.log(tile);
             let startIndex = tileIndex;
             let endIndex = startIndex + ship.shipLength;
             let offset = 0;
+
+            if (tile.ship !== null) {
+                //write code here//
+            }
 
             if (this.orientation === "Horizontal") {
                 let endRow = Math.floor(endIndex / 10);
@@ -600,11 +618,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// import { allSunk } from "./gameboard";
 
 (0,_game_manager__WEBPACK_IMPORTED_MODULE_1__["default"])()
     .initialize();
 
 (0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.playAgain)();
+// allSunk();
 
 
 
