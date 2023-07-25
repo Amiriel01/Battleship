@@ -13,21 +13,25 @@ export default () => {
         player1: player(document.getElementById("player1-controls"), "player1"),
         player2: player(document.getElementById("player2-controls"), "player2"),
         turn: 2,
-        
+        playerVsAI: false,
+
 
         initialize: function () {
-            console.log(this.player1)
             this.player1.initialize();
             this.player2.initialize();
+            document.querySelector("#player-vs-computer").addEventListener("click", () => this.playerVsAI = true);
+            document.querySelector("#player-vs-player").addEventListener("click", () => this.playerVsAI = false);
         },
 
         alternateTurns: function () {
             if (this.turn === 1) {
                 this.turn = 2;
-                
+
             } else {
                 this.turn = 1;
-                
+                if (this.playerVsAI === true) {
+                    computerSelection();
+                }
             }
         },
 
@@ -47,9 +51,12 @@ export default () => {
             }
         },
 
-        recieveAttackGame: function (tileIndex) {
-            
+        recieveAttackGame: function (tileIndex, originatingPlayerGameboard) {
+
             let player = this.getPlayerTurnObject();
+            if (player !== originatingPlayerGameboard) {
+                return;
+            }
             player.gameBoard.recieveAttack(1, tileIndex);
             this.alternateTurns();
             this.allSunk();
@@ -62,7 +69,7 @@ export default () => {
         },
 
         hideShips: function () {
-           
+
             this.player1.getGameBoard().querySelectorAll(".ship-here").forEach(element => {
                 element.classList.remove("ship-here");
             });
@@ -83,6 +90,12 @@ export default () => {
                 document.querySelector("#instructions").innerText = "Player 1 Wins!";
             }
         },
+
+        //computer selection//
+        getComputerChoice: function () {
+            let computerSelection = Math.floor(Math.random() * 100);
+            return computerSelection;
+        }
     };
     return instance;
 }

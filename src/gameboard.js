@@ -100,9 +100,9 @@ function createGrids(gridElement, gameBoardObject, player) {
                     document.querySelector("#instructions").innerText = "Place all ships on the boards before starting the game!"
                     return;
                 } else {
-                    gameManager().recieveAttackGame(tileIndex);
+                    gameManager().recieveAttackGame(tileIndex, player);
                 }
-
+                
                 // let clickLocation = [r, c];
                 // console.log(clickLocation)
 

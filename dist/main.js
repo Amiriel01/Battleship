@@ -30,21 +30,25 @@ let instance = null;
         player1: (0,_player__WEBPACK_IMPORTED_MODULE_0__.player)(document.getElementById("player1-controls"), "player1"),
         player2: (0,_player__WEBPACK_IMPORTED_MODULE_0__.player)(document.getElementById("player2-controls"), "player2"),
         turn: 2,
-        
+        playerVsAI: false,
+
 
         initialize: function () {
-            console.log(this.player1)
             this.player1.initialize();
             this.player2.initialize();
+            document.querySelector("#player-vs-computer").addEventListener("click", () => this.playerVsAI = true);
+            document.querySelector("#player-vs-player").addEventListener("click", () => this.playerVsAI = false);
         },
 
         alternateTurns: function () {
             if (this.turn === 1) {
                 this.turn = 2;
-                
+
             } else {
                 this.turn = 1;
-                
+                if (this.playerVsAI === true) {
+                    computerSelection();
+                }
             }
         },
 
@@ -64,9 +68,12 @@ let instance = null;
             }
         },
 
-        recieveAttackGame: function (tileIndex) {
-            
+        recieveAttackGame: function (tileIndex, originatingPlayerGameboard) {
+
             let player = this.getPlayerTurnObject();
+            if (player !== originatingPlayerGameboard) {
+                return;
+            }
             player.gameBoard.recieveAttack(1, tileIndex);
             this.alternateTurns();
             this.allSunk();
@@ -79,7 +86,7 @@ let instance = null;
         },
 
         hideShips: function () {
-           
+
             this.player1.getGameBoard().querySelectorAll(".ship-here").forEach(element => {
                 element.classList.remove("ship-here");
             });
@@ -100,6 +107,12 @@ let instance = null;
                 document.querySelector("#instructions").innerText = "Player 1 Wins!";
             }
         },
+
+        //computer selection//
+        getComputerChoice: function () {
+            let computerSelection = Math.floor(Math.random() * 100);
+            return computerSelection;
+        }
     };
     return instance;
 });
@@ -236,9 +249,9 @@ function createGrids(gridElement, gameBoardObject, player) {
                     document.querySelector("#instructions").innerText = "Place all ships on the boards before starting the game!"
                     return;
                 } else {
-                    (0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().recieveAttackGame(tileIndex);
+                    (0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().recieveAttackGame(tileIndex, player);
                 }
-
+                
                 // let clickLocation = [r, c];
                 // console.log(clickLocation)
 
@@ -362,14 +375,17 @@ let player = (rootElement, playerName) => {
                 e.preventDefault();
             }
             ship.shipPlaced = true;
-            this.getValidTiles(tileIndex, ship, this.gameBoard).forEach((tile) => {
+            this.getValidPlacement(tileIndex, ship, this.gameBoard).forEach((tile) => {
                 //places ship on multiple tiles, not just one tile//
                 tile.ship = ship;
                 tile.tile.classList.add("ship-here");
             })
             let allShipsPlaced = this.ships.filter((ship) => ship.shipPlaced).length === 5;
             if (allShipsPlaced) {
-                (0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().hideShips();
+                this.getGameBoard().querySelectorAll(".ship-hover-marker").forEach((element) => {
+                    element.classList.remove("ship-hover-marker");
+                })
+                ;(0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().hideShips();
             }
         },
 
@@ -380,7 +396,7 @@ let player = (rootElement, playerName) => {
                 this.shipDrop(null, index, ship);
             })
             this.renderShips(this.root.querySelector("#ship-options"), this.ships);
-            
+
         },
 
         gridHoverOver(e, tileIndex, gameBoard) {
@@ -389,12 +405,14 @@ let player = (rootElement, playerName) => {
 
             //this will make sure all the valid tiles are highlighted//
             // console.log(ship)
-            this.getValidTiles(tileIndex, ship, gameBoard).forEach((tile) => {
+            this.getValidPlacement(tileIndex, ship, gameBoard).forEach((tile) => {
                 tile.tile.classList.add("ship-hover-marker")
-                setTimeout(function() {
-                    tile.tile.classList.remove("ship-hover-marker");
-                }, 500);
             })
+        },
+
+        getValidPlacement(tileIndex, ship, gameBoard) {
+            let newIndex = this.getClosestIndex(tileIndex, ship);
+            return this.getValidTiles(newIndex, ship, gameBoard);
         },
 
         getValidTiles(tileIndex, ship, gameBoard) {
@@ -403,17 +421,27 @@ let player = (rootElement, playerName) => {
             let startIndex = tileIndex;
             let endIndex = startIndex + ship.shipLength;
             let offset = 0;
+            // console.log(startIndex)
+            // console.log(endIndex)
 
-            if (tile.ship !== null) {
-                //write code here//
+            //this checks to make sure there isn't already a shipt there and wraps properly if there is//
+            if (tile.ship !== null && this.orientation === "Horizontal") {
+                
+            } else if (tile.ship !== null && this.orientation === "Vertical") {
+
             }
-
+            //this checks to make sure ship isn't in a corner and wraps properly if it is//
             if (this.orientation === "Horizontal") {
-                let endRow = Math.floor(endIndex / 10);
+                let endRow = Math.floor(endIndex / 10) / 10;
                 if (endRow > tile.row) {
                     offset = endIndex % 10;
                     // console.log(offset);
                 }
+                startIndex = startIndex - offset;
+                endIndex = endIndex - offset;
+
+                return gameBoard.myBoard.slice(startIndex, endIndex);
+
             } else {
                 let returnTiles = [];
                 let startRow = Math.floor(startIndex / 10);
@@ -432,22 +460,64 @@ let player = (rootElement, playerName) => {
                 return returnTiles;
             }
 
-            startIndex = startIndex - offset;
-            endIndex = endIndex - offset;
-            // let decimalValue = ((startIndex % 10) - Math.floor(startIndex));
+        },
 
-            // console.log(ship.shipLength);
-            // console.log(this.orientation);
-            // console.log(startIndex);
-            // console.log(endIndex);
-
-            // if (ship.shipLength === 5 && decimalValue === .6 && startIndex <= 95 || ship.shipLength === 4 && decimalValue === .7 && startIndex <= 96 || ship.shipLength === 3 && decimalValue === .8 && startIndex <= 97 || ship.shipLength === 2 && decimalValue === .9 && startIndex <= 98) {
-            //     // console.log(decimalValue);
-            //     return gameBoard.myBoard.slice(startIndex, endIndex);
-            // } else {
-            //     return [];
-            // }
-            return gameBoard.myBoard.slice(startIndex, endIndex);
+        //if ship does not fit gameboard will try to place ship in the closest location//
+        getClosestIndex(index, ship) {
+            let shipFits = false;
+            let xOffset = 0;
+            let yOffset = 0;
+            let incrementingX = true;
+            let incrementingY = true;
+            let currentFurthestX = 0;
+            let currentFurthestY = 0;
+            let direction = "Horizontal";
+            const maxX = 9;
+            const maxY = 100;
+            let newIndex = index;
+            while (shipFits === false) {
+                if (direction === "Horizontal") {
+                    if ((currentFurthestX >= Math.abs(xOffset) + 1) || (index + xOffset < 0)) {
+                        //continue will continue to loop but not do anything else within the loop for just this round and resets loop to start//
+                        direction = "Vertical";
+                        incrementingX = !incrementingX;
+                        continue;
+                    }
+                    xOffset = incrementingX ? xOffset +1 : xOffset -1 
+                    if (Math.abs(xOffset) >= maxX) {
+                        xOffset = incrementingX ? maxX : maxX * -1; 
+                    }
+                    // let originalRow = Math.floor(index / 10);
+                    // let newRow = Math.floor((newIndex + xOffset +  ship.shipLength) / 10);
+                    // if (newRow < originalRow) {
+                    //     xOffset = (index - (originalRow * 10)) * - 1;
+                    // } else if (newRow > originalRow) {
+                    //     xOffset = (newRow * 10) -index;
+                    // }
+                    if (currentFurthestX > Math.abs(xOffset)) {
+                        currentFurthestX = Math.abs(xOffset);
+                    }
+                } else if (direction === "Vertical") {
+                    if ((currentFurthestY >= Math.abs(yOffset) + 1)|| (index + (yOffset * 10) < 0)) {
+                        //continue will continue to loop but not do anything else within the loop for just this round and resets loop to start//
+                        direction = "Horizontal";
+                        incrementingY = !incrementingY;
+                        continue;
+                    }
+                    yOffset = incrementingY ? yOffset +1 : yOffset -1 
+                    if (Math.abs(yOffset) * 10 >= maxY) {
+                        yOffset = incrementingY ? maxY : maxY * -1; 
+                    }
+                    if (currentFurthestY > Math.abs(yOffset)) {
+                        currentFurthestY = Math.abs(yOffset);
+                    }
+                }
+                newIndex = (yOffset * 10) + xOffset + index;
+                console.log(`newIndex ${newIndex} xOffset ${xOffset} yOffset ${yOffset}`)
+                let tiles = this.getValidTiles(newIndex, ship, this.gameBoard);
+                shipFits = tiles.every((tile) => tile.ship === null);
+            }
+            return newIndex;
         },
 
         gridLeaveHover(e) {
@@ -497,14 +567,6 @@ let player = (rootElement, playerName) => {
 }
 
 
-
-
-
-//computer selection//
-function getComputerChoice() {
-    let computerSelection = Math.floor(Math.random() * 100);
-    // return choices[computerSelection];
-}
 
 
 
@@ -624,7 +686,8 @@ __webpack_require__.r(__webpack_exports__);
     .initialize();
 
 (0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.playAgain)();
-// allSunk();
+
+
 
 
 
