@@ -113,16 +113,11 @@ function createGrids(gridElement, gameBoardObject, player) {
 
 }
 
-function playAgain() {
-    document.querySelector("#play-again").addEventListener("click", function () {
-        document.location.reload();
-    })
 
-}
 
 export {
     createGameBoard,
     createGrids,
-    playAgain,
+    
    
 };

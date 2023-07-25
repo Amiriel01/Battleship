@@ -26,12 +26,13 @@ export default () => {
         alternateTurns: function () {
             if (this.turn === 1) {
                 this.turn = 2;
-
+                console.log(this.turn)
             } else {
                 this.turn = 1;
                 if (this.playerVsAI === true) {
                     computerSelection();
                 }
+                console.log(this.turn)
             }
         },
 
@@ -54,12 +55,14 @@ export default () => {
         recieveAttackGame: function (tileIndex, originatingPlayerGameboard) {
 
             let player = this.getPlayerTurnObject();
+
             if (player !== originatingPlayerGameboard) {
                 return;
             }
             player.gameBoard.recieveAttack(1, tileIndex);
             this.alternateTurns();
             this.allSunk();
+            
             // console.log(this.turn)
         },
 
@@ -93,7 +96,14 @@ export default () => {
 
         //computer selection//
         getComputerChoice: function () {
-            let computerSelection = Math.floor(Math.random() * 100);
+            let computerSelection = null;
+            
+            while (computerSelection === null) {
+                Math.floor(Math.random() * 100);
+                if (computerSelection !== null) {
+                this.player2
+                }
+            }
             return computerSelection;
         }
     };
