@@ -2,6 +2,29 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/dom-manager.js":
+/*!****************************!*\
+  !*** ./src/dom-manager.js ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   bindPlayAgainButton: () => (/* binding */ bindPlayAgainButton)
+/* harmony export */ });
+
+
+function bindPlayAgainButton() {
+    document.querySelector("#play-again").addEventListener("click", function () {
+        document.location.reload();
+    })
+
+}
+
+
+
+/***/ }),
+
 /***/ "./src/game-manager.js":
 /*!*****************************!*\
   !*** ./src/game-manager.js ***!
@@ -43,12 +66,13 @@ let instance = null;
         alternateTurns: function () {
             if (this.turn === 1) {
                 this.turn = 2;
-
+                console.log(this.turn)
             } else {
                 this.turn = 1;
                 if (this.playerVsAI === true) {
                     computerSelection();
                 }
+                console.log(this.turn)
             }
         },
 
@@ -71,12 +95,14 @@ let instance = null;
         recieveAttackGame: function (tileIndex, originatingPlayerGameboard) {
 
             let player = this.getPlayerTurnObject();
+
             if (player !== originatingPlayerGameboard) {
                 return;
             }
             player.gameBoard.recieveAttack(1, tileIndex);
             this.alternateTurns();
             this.allSunk();
+            
             // console.log(this.turn)
         },
 
@@ -110,7 +136,14 @@ let instance = null;
 
         //computer selection//
         getComputerChoice: function () {
-            let computerSelection = Math.floor(Math.random() * 100);
+            let computerSelection = null;
+            
+            while (computerSelection === null) {
+                Math.floor(Math.random() * 100);
+                if (computerSelection !== null) {
+                this.player2
+                }
+            }
             return computerSelection;
         }
     };
@@ -141,8 +174,7 @@ let instance = null;
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   createGameBoard: () => (/* binding */ createGameBoard),
-/* harmony export */   createGrids: () => (/* binding */ createGrids),
-/* harmony export */   playAgain: () => (/* binding */ playAgain)
+/* harmony export */   createGrids: () => (/* binding */ createGrids)
 /* harmony export */ });
 /* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ "./src/player.js");
 /* harmony import */ var _ships__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ships */ "./src/ships.js");
@@ -262,12 +294,7 @@ function createGrids(gridElement, gameBoardObject, player) {
 
 }
 
-function playAgain() {
-    document.querySelector("#play-again").addEventListener("click", function () {
-        document.location.reload();
-    })
 
-}
 
 
 
@@ -675,17 +702,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _gameboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./gameboard */ "./src/gameboard.js");
 /* harmony import */ var _game_manager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game-manager */ "./src/game-manager.js");
 /* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./player */ "./src/player.js");
+/* harmony import */ var _dom_manager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./dom-manager */ "./src/dom-manager.js");
 // import { createShip } from "./ships";
 
 
 
 
-// import { allSunk } from "./gameboard";
+
+
+
 
 (0,_game_manager__WEBPACK_IMPORTED_MODULE_1__["default"])()
     .initialize();
 
-(0,_gameboard__WEBPACK_IMPORTED_MODULE_0__.playAgain)();
+(0,_dom_manager__WEBPACK_IMPORTED_MODULE_3__.bindPlayAgainButton)();
+// bindRandomizeShipsButton();
 
 
 
