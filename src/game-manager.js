@@ -1,6 +1,7 @@
 import { player } from "./player";
 import { createShip } from "./ships";
 import { createGameBoard } from "./gameboard";
+import domManager from "./dom-manager";
 
 let instance = null;
 
@@ -19,7 +20,10 @@ export default () => {
         initialize: function () {
             this.player1.initialize();
             this.player2.initialize();
-            document.querySelector("#player-vs-computer").addEventListener("click", () => this.playerVsAI = true);
+            document.querySelector("#player-vs-computer").addEventListener("click", () => {
+                this.playerVsAI = true
+                
+            });
             document.querySelector("#player-vs-player").addEventListener("click", () => this.playerVsAI = false);
         },
 

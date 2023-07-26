@@ -10,7 +10,7 @@ import { player } from "./player";
 gameManager()
     .initialize();
 
-bindPlayAgainButton();
+// bindPlayAgainButton();
 // bindRandomizeShipsButton();
 
 

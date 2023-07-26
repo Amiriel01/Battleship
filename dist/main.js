@@ -10,18 +10,50 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   bindPlayAgainButton: () => (/* binding */ bindPlayAgainButton)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ "./src/player.js");
 
 
-function bindPlayAgainButton() {
-    document.querySelector("#play-again").addEventListener("click", function () {
-        document.location.reload();
-    })
+let instance = null;
 
-}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (() => {
+    if (instance !== null) {
+        return instance;
+    }
+
+    instance = {
+        
+        bindPlayAgainButton: function () {
+            document.querySelector("#play-again").addEventListener("click", function () {
+                document.location.reload();
+            })
+        },
+
+        bindOrientationButton: function () {
+            let button = document.querySelector("#ship-orientation");
+            button.addEventListener("click", () => {
+                this.flipOrientation();
+                button.innerText = this.orientation;
+            });
+        },
+
+        flipOrientation: function () {
+            if (this.orientation === "Horizontal") {
+                this.orientation = "Vertical";
+            } else {
+                this.orientation = "Horizontal";
+            }
+        },
 
 
+        // export { 
+        //     bindPlayAgainButton, 
+        //     bindOrientationButton
+        // }
+    }
+    return instance
+});
 
 /***/ }),
 
@@ -38,6 +70,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ "./src/player.js");
 /* harmony import */ var _ships__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ships */ "./src/ships.js");
 /* harmony import */ var _gameboard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./gameboard */ "./src/gameboard.js");
+/* harmony import */ var _dom_manager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./dom-manager */ "./src/dom-manager.js");
+
 
 
 
@@ -59,7 +93,10 @@ let instance = null;
         initialize: function () {
             this.player1.initialize();
             this.player2.initialize();
-            document.querySelector("#player-vs-computer").addEventListener("click", () => this.playerVsAI = true);
+            document.querySelector("#player-vs-computer").addEventListener("click", () => {
+                this.playerVsAI = true
+                
+            });
             document.querySelector("#player-vs-player").addEventListener("click", () => this.playerVsAI = false);
         },
 
@@ -314,6 +351,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ships__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ships */ "./src/ships.js");
 /* harmony import */ var _gameboard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./gameboard */ "./src/gameboard.js");
 /* harmony import */ var _game_manager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./game-manager */ "./src/game-manager.js");
+/* harmony import */ var _dom_manager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./dom-manager */ "./src/dom-manager.js");
 
 
 
@@ -328,29 +366,30 @@ let player = (rootElement, playerName) => {
         playerName: playerName,
         ships: [],
         gameBoard: (0,_gameboard__WEBPACK_IMPORTED_MODULE_1__.createGameBoard)(),
-        flipOrientation: function () {
-            if (this.orientation === "Horizontal") {
-                this.orientation = "Vertical";
-            } else {
-                this.orientation = "Horizontal";
-            }
-        },
+        // flipOrientation: function () {
+        //     if (this.orientation === "Horizontal") {
+        //         this.orientation = "Vertical";
+        //     } else {
+        //         this.orientation = "Horizontal";
+        //     }
+        // },
 
         initialize: function () {
-            this.bindOrientationButton();
+            (0,_dom_manager__WEBPACK_IMPORTED_MODULE_3__["default"])().bindOrientationButton();
             this.ships = this.createShips(this.root.querySelector("#ship-options"));
             (0,_gameboard__WEBPACK_IMPORTED_MODULE_1__.createGrids)(this.getGameBoard(), this.gameBoard, this);
             this.dragDropInitializer();
             this.bindRandomizeShipsButton();
+            
         },
 
-        bindOrientationButton: function () {
-            let button = this.root.querySelector("#ship-orientation");
-            button.addEventListener("click", () => {
-                this.flipOrientation();
-                button.innerText = this.orientation;
-            });
-        },
+        // bindOrientationButton: function () {
+        //     let button = this.root.querySelector("#ship-orientation");
+        //     button.addEventListener("click", () => {
+        //         this.flipOrientation();
+        //         button.innerText = this.orientation;
+        //     });
+        // },
 
         bindRandomizeShipsButton: function () {
             let button = this.root.querySelector(".randomize-button");
@@ -451,7 +490,7 @@ let player = (rootElement, playerName) => {
             // console.log(startIndex)
             // console.log(endIndex)
 
-            //this checks to make sure there isn't already a shipt there and wraps properly if there is//
+            //this checks to make sure there isn't already a ship there and wraps properly if there is//
             if (tile.ship !== null && this.orientation === "Horizontal") {
                 
             } else if (tile.ship !== null && this.orientation === "Vertical") {
@@ -715,7 +754,7 @@ __webpack_require__.r(__webpack_exports__);
 (0,_game_manager__WEBPACK_IMPORTED_MODULE_1__["default"])()
     .initialize();
 
-(0,_dom_manager__WEBPACK_IMPORTED_MODULE_3__.bindPlayAgainButton)();
+// bindPlayAgainButton();
 // bindRandomizeShipsButton();
 
 

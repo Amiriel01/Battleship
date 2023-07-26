@@ -1,7 +1,7 @@
 import { createShip } from "./ships"
 import { createGrids, createGameBoard } from "./gameboard";
 import gameManager from "./game-manager";
-
+import domManager from "./dom-manager";
 
 let player = (rootElement, playerName) => {
 
@@ -12,29 +12,30 @@ let player = (rootElement, playerName) => {
         playerName: playerName,
         ships: [],
         gameBoard: createGameBoard(),
-        flipOrientation: function () {
-            if (this.orientation === "Horizontal") {
-                this.orientation = "Vertical";
-            } else {
-                this.orientation = "Horizontal";
-            }
-        },
+        // flipOrientation: function () {
+        //     if (this.orientation === "Horizontal") {
+        //         this.orientation = "Vertical";
+        //     } else {
+        //         this.orientation = "Horizontal";
+        //     }
+        // },
 
         initialize: function () {
-            this.bindOrientationButton();
+            domManager().bindOrientationButton();
             this.ships = this.createShips(this.root.querySelector("#ship-options"));
             createGrids(this.getGameBoard(), this.gameBoard, this);
             this.dragDropInitializer();
             this.bindRandomizeShipsButton();
+            
         },
 
-        bindOrientationButton: function () {
-            let button = this.root.querySelector("#ship-orientation");
-            button.addEventListener("click", () => {
-                this.flipOrientation();
-                button.innerText = this.orientation;
-            });
-        },
+        // bindOrientationButton: function () {
+        //     let button = this.root.querySelector("#ship-orientation");
+        //     button.addEventListener("click", () => {
+        //         this.flipOrientation();
+        //         button.innerText = this.orientation;
+        //     });
+        // },
 
         bindRandomizeShipsButton: function () {
             let button = this.root.querySelector(".randomize-button");
@@ -135,7 +136,7 @@ let player = (rootElement, playerName) => {
             // console.log(startIndex)
             // console.log(endIndex)
 
-            //this checks to make sure there isn't already a shipt there and wraps properly if there is//
+            //this checks to make sure there isn't already a ship there and wraps properly if there is//
             if (tile.ship !== null && this.orientation === "Horizontal") {
                 
             } else if (tile.ship !== null && this.orientation === "Vertical") {
