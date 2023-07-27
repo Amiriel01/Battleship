@@ -22,7 +22,7 @@ export default () => {
             this.player2.initialize();
             document.querySelector("#player-vs-computer").addEventListener("click", () => {
                 this.playerVsAI = true
-                
+                this.player2.randomizeShips()
             });
             document.querySelector("#player-vs-player").addEventListener("click", () => this.playerVsAI = false);
         },

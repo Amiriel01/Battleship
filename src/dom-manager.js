@@ -8,34 +8,28 @@ export default () => {
     }
 
     instance = {
-        
+
         bindPlayAgainButton: function () {
             document.querySelector("#play-again").addEventListener("click", function () {
                 document.location.reload();
             })
         },
 
-        bindOrientationButton: function () {
-            let button = document.querySelector("#ship-orientation");
+        bindOrientationButton: function (player) {
+            let button = player.root.querySelector("#ship-orientation");
             button.addEventListener("click", () => {
-                this.flipOrientation();
-                button.innerText = this.orientation;
+                player.flipOrientation();
+                button.innerText = player.orientation;
             });
         },
 
-        flipOrientation: function () {
-            if (this.orientation === "Horizontal") {
-                this.orientation = "Vertical";
-            } else {
-                this.orientation = "Horizontal";
-            }
+        bindRandomizeShipsButton: function (player) {
+            let button = player.root.querySelector(".randomize-button");
+            button.addEventListener("click", () => {
+                player.randomizeShips();
+            });
         },
 
-
-        // export { 
-        //     bindPlayAgainButton, 
-        //     bindOrientationButton
-        // }
     }
     return instance
 }

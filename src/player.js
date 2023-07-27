@@ -12,36 +12,21 @@ let player = (rootElement, playerName) => {
         playerName: playerName,
         ships: [],
         gameBoard: createGameBoard(),
-        // flipOrientation: function () {
-        //     if (this.orientation === "Horizontal") {
-        //         this.orientation = "Vertical";
-        //     } else {
-        //         this.orientation = "Horizontal";
-        //     }
-        // },
+
+        flipOrientation: function () {
+            if (this.orientation === "Horizontal") {
+                this.orientation = "Vertical";
+            } else {
+                this.orientation = "Horizontal";
+            }
+        },
 
         initialize: function () {
-            domManager().bindOrientationButton();
+            domManager().bindRandomizeShipsButton(this);
+            domManager().bindOrientationButton(this);
             this.ships = this.createShips(this.root.querySelector("#ship-options"));
             createGrids(this.getGameBoard(), this.gameBoard, this);
             this.dragDropInitializer();
-            this.bindRandomizeShipsButton();
-            
-        },
-
-        // bindOrientationButton: function () {
-        //     let button = this.root.querySelector("#ship-orientation");
-        //     button.addEventListener("click", () => {
-        //         this.flipOrientation();
-        //         button.innerText = this.orientation;
-        //     });
-        // },
-
-        bindRandomizeShipsButton: function () {
-            let button = this.root.querySelector(".randomize-button");
-            button.addEventListener("click", () => {
-                this.randomizeShips();
-            });
         },
 
         getGameBoard() {
@@ -97,15 +82,24 @@ let player = (rootElement, playerName) => {
                 this.getGameBoard().querySelectorAll(".ship-hover-marker").forEach((element) => {
                     element.classList.remove("ship-hover-marker");
                 })
-                gameManager().hideShips();
+                setTimeout(() => {
+                    //give a css animation for fade out//
+                    gameManager().hideShips();
+                }, 3000)
             }
         },
 
 
         randomizeShips() {
             this.ships.forEach((ship) => {
-                let index = Math.floor(Math.random() * 100);
-                this.shipDrop(null, index, ship);
+                if (!ship.shipPlaced) {
+                    let index = Math.floor(Math.random() * 100);
+                    let randomChance = Math.floor(Math.random() * 100);
+                    if (randomChance > 50) {
+                        this.flipOrientation();
+                    }
+                    this.shipDrop(null, index, ship);
+                }
             })
             this.renderShips(this.root.querySelector("#ship-options"), this.ships);
 
@@ -133,18 +127,12 @@ let player = (rootElement, playerName) => {
             let startIndex = tileIndex;
             let endIndex = startIndex + ship.shipLength;
             let offset = 0;
-            // console.log(startIndex)
-            // console.log(endIndex)
+            console.log(startIndex)
+            console.log(endIndex)
 
-            //this checks to make sure there isn't already a ship there and wraps properly if there is//
-            if (tile.ship !== null && this.orientation === "Horizontal") {
-                
-            } else if (tile.ship !== null && this.orientation === "Vertical") {
-
-            }
             //this checks to make sure ship isn't in a corner and wraps properly if it is//
             if (this.orientation === "Horizontal") {
-                let endRow = Math.floor(endIndex / 10) / 10;
+                let endRow = Math.floor(endIndex / 10);
                 if (endRow > tile.row) {
                     offset = endIndex % 10;
                     // console.log(offset);
@@ -176,7 +164,9 @@ let player = (rootElement, playerName) => {
 
         //if ship does not fit gameboard will try to place ship in the closest location//
         getClosestIndex(index, ship) {
-            let shipFits = false;
+            //this line checks to see if we need a closest index//
+            let shipFits = this.getValidTiles(index, ship, this.gameBoard).every((tile) => tile.ship === null);
+            console.log(shipFits)
             let xOffset = 0;
             let yOffset = 0;
             let incrementingX = true;
@@ -189,39 +179,28 @@ let player = (rootElement, playerName) => {
             let newIndex = index;
             while (shipFits === false) {
                 if (direction === "Horizontal") {
-                    if ((currentFurthestX >= Math.abs(xOffset) + 1) || (index + xOffset < 0)) {
+                    if ((currentFurthestX <= Math.abs(xOffset) + 1) || (index + xOffset < 0) || ((index + xOffset) > maxY)) {
                         //continue will continue to loop but not do anything else within the loop for just this round and resets loop to start//
                         direction = "Vertical";
                         incrementingX = !incrementingX;
+                        currentFurthestX = Math.abs(xOffset) + 1;
                         continue;
                     }
-                    xOffset = incrementingX ? xOffset +1 : xOffset -1 
+                    xOffset = incrementingX ? xOffset + 1 : xOffset - 1
                     if (Math.abs(xOffset) >= maxX) {
-                        xOffset = incrementingX ? maxX : maxX * -1; 
-                    }
-                    // let originalRow = Math.floor(index / 10);
-                    // let newRow = Math.floor((newIndex + xOffset +  ship.shipLength) / 10);
-                    // if (newRow < originalRow) {
-                    //     xOffset = (index - (originalRow * 10)) * - 1;
-                    // } else if (newRow > originalRow) {
-                    //     xOffset = (newRow * 10) -index;
-                    // }
-                    if (currentFurthestX > Math.abs(xOffset)) {
-                        currentFurthestX = Math.abs(xOffset);
+                        xOffset = incrementingX ? maxX : maxX * -1;
                     }
                 } else if (direction === "Vertical") {
-                    if ((currentFurthestY >= Math.abs(yOffset) + 1)|| (index + (yOffset * 10) < 0)) {
+                    if ((currentFurthestY <= Math.abs(yOffset) + 1) || (index + (yOffset * 10) < 0) || (index + (yOffset * 10) > maxY)) {
                         //continue will continue to loop but not do anything else within the loop for just this round and resets loop to start//
                         direction = "Horizontal";
                         incrementingY = !incrementingY;
+                        currentFurthestY = Math.abs(yOffset) + 1;
                         continue;
                     }
-                    yOffset = incrementingY ? yOffset +1 : yOffset -1 
+                    yOffset = incrementingY ? yOffset + 1 : yOffset - 1
                     if (Math.abs(yOffset) * 10 >= maxY) {
-                        yOffset = incrementingY ? maxY : maxY * -1; 
-                    }
-                    if (currentFurthestY > Math.abs(yOffset)) {
-                        currentFurthestY = Math.abs(yOffset);
+                        yOffset = incrementingY ? maxY : maxY * -1;
                     }
                 }
                 newIndex = (yOffset * 10) + xOffset + index;
