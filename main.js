@@ -105,7 +105,7 @@ let instance = null;
                     setTimeout(() => {
                         let target = this.getComputerChoice();
                         this.recieveAttackGame(target, this.player1);
-                    }, 2000)
+                    }, 1200)
                 }
                 console.log(this.turn)
             }
@@ -161,8 +161,13 @@ let instance = null;
             let player2ShipsSunk = this.player2.ships.every((ship) => ship.isSunk())
 
             if (player1ShipsSunk) {
-                document.querySelector("#instructions").style.color = "#ff0080";
-                document.querySelector("#instructions").innerText = "Player 2 Wins!";
+                if (this.playerVsAI === false) {
+                    document.querySelector("#instructions").style.color = "#ff0080";
+                    document.querySelector("#instructions").innerText = "Player 2 Wins!";
+                } else {
+                    document.querySelector("#instructions").style.color = "#ff0080";
+                    document.querySelector("#instructions").innerText = "The Computer Wins!";
+                }
             } else if (player2ShipsSunk) {
                 document.querySelector("#instructions").style.color = "#ff0080";
                 document.querySelector("#instructions").innerText = "Player 1 Wins!";
@@ -268,7 +273,7 @@ let createGameBoard = () => {
                 // tile.ship.isSunk().count = 0;
 
                 if (tile.ship.isSunk()) {
-                    console.log("Ship is Sunk!");
+                    // console.log("Ship is Sunk!");
                     console.log(tile.ship.isSunk())
                 }
             } else {
@@ -462,7 +467,7 @@ let player = (rootElement, playerName) => {
                 setTimeout(() => {
                     //give a css animation for fade out//
                     ;(0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().hideShips();
-                }, 3000)
+                }, 2000)
             }
         },
 
