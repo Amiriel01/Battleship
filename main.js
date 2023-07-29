@@ -102,7 +102,10 @@ let instance = null;
             } else {
                 this.turn = 1;
                 if (this.playerVsAI === true) {
-                    computerSelection();
+                    setTimeout(() => {
+                        let target = this.getComputerChoice();
+                        this.recieveAttackGame(target, this.player1);
+                    }, 2000)
                 }
                 console.log(this.turn)
             }
@@ -134,7 +137,7 @@ let instance = null;
             player.gameBoard.recieveAttack(1, tileIndex);
             this.alternateTurns();
             this.allSunk();
-            
+
             // console.log(this.turn)
         },
 
@@ -169,11 +172,12 @@ let instance = null;
         //computer selection//
         getComputerChoice: function () {
             let computerSelection = null;
-            
+
             while (computerSelection === null) {
-                Math.floor(Math.random() * 100);
-                if (computerSelection !== null) {
-                this.player2
+                let index = Math.floor(Math.random() * 100);
+                let tile = this.player1.gameBoard.myBoard[index];
+                if (tile.isHit === false && tile.isMiss === false) {
+                    computerSelection = index;
                 }
             }
             return computerSelection;
@@ -248,7 +252,11 @@ let createGameBoard = () => {
                 tile.ship.hit();
                 tile.tile.classList.add("hit");
                 document.querySelector("#instructions").style.color = "#FF003F";
-                document.querySelector("#instructions").innerText = "You hit a ship!"
+                if ((0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().turn === 2) {
+                    document.querySelector("#instructions").innerText = "Player One hit a ship!"
+                } else {
+                    document.querySelector("#instructions").innerText = "Player Two hit a ship!"
+                }
                 // tile.ship.isSunk().count = 0;
 
                 if (tile.ship.isSunk()) {
@@ -259,10 +267,14 @@ let createGameBoard = () => {
                 tile.isMiss = true;
                 tile.tile.classList.add("miss");
                 document.querySelector("#instructions").style.color = "#047fb0";
-                document.querySelector("#instructions").innerText = "You missed the ships."
+                if ((0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().turn === 2) {
+                    document.querySelector("#instructions").innerText = "Player One missed the ships."
+                } else {
+                    document.querySelector("#instructions").innerText = "Player Two missed the ships."
+                }
             }
         },
-        
+
 
         shotFired: function (player, tileIndex) {
             //if player = 1 ?(is true/false) true take option 1 and false take option 2//
@@ -315,7 +327,7 @@ function createGrids(gridElement, gameBoardObject, player) {
                 } else {
                     (0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().recieveAttackGame(tileIndex, player);
                 }
-                
+
                 // let clickLocation = [r, c];
                 // console.log(clickLocation)
 
@@ -476,8 +488,8 @@ let player = (rootElement, playerName) => {
             let startIndex = tileIndex;
             let endIndex = startIndex + ship.shipLength;
             let offset = 0;
-            console.log(startIndex)
-            console.log(endIndex)
+            // console.log(startIndex)
+            // console.log(endIndex)
 
             //this checks to make sure ship isn't in a corner and wraps properly if it is//
             if (this.orientation === "Horizontal") {
@@ -515,7 +527,7 @@ let player = (rootElement, playerName) => {
         getClosestIndex(index, ship) {
             //this line checks to see if we need a closest index//
             let shipFits = this.getValidTiles(index, ship, this.gameBoard).every((tile) => tile.ship === null);
-            console.log(shipFits)
+            // console.log(shipFits)
             let xOffset = 0;
             let yOffset = 0;
             let incrementingX = true;
@@ -523,36 +535,66 @@ let player = (rootElement, playerName) => {
             let currentFurthestX = 0;
             let currentFurthestY = 0;
             let direction = "Horizontal";
-            const maxX = 9;
             const maxY = 100;
             let newIndex = index;
             while (shipFits === false) {
+                console.log(`newIndex ${newIndex} xOffset ${xOffset} yOffset ${yOffset}`)
                 if (direction === "Horizontal") {
-                    if ((currentFurthestX <= Math.abs(xOffset) + 1) || (index + xOffset < 0) || ((index + xOffset) > maxY)) {
-                        //continue will continue to loop but not do anything else within the loop for just this round and resets loop to start//
+                    //if the index + offset is less than zero or it is greater than the maxX then we want to flip directions//
+                    //if we've gone further than we've gone before we also want to flip directions//
+                    xOffset = incrementingX ? xOffset + 1 : xOffset - 1;
+                    let flipDirection = false;
+                    if ((index + xOffset) <= 0) {
+                        flipDirection = true;
+                        xOffset = xOffset + (Math.abs(index + xOffset));
+                    }
+
+                    let currentRow = Math.floor((index + yOffset) / 10);
+                    let newRow = Math.floor((index + xOffset + yOffset) / 10);
+                    if (currentRow !== newRow) {
+                        if (currentRow < newRow) {
+                            xOffset = xOffset + ((index + yOffset) - (index + xOffset + yOffset));
+                        } else {
+                            xOffset = xOffset - ((index + yOffset) - (index + xOffset + yOffset));
+                        }
+                        flipDirection = true;
+                    }
+
+                    if (currentFurthestX < Math.abs(xOffset)) {
+                        flipDirection = true;
+                        currentFurthestX = Math.abs(xOffset);
+                    }
+
+                    if (flipDirection === true) {
                         direction = "Vertical";
                         incrementingX = !incrementingX;
-                        currentFurthestX = Math.abs(xOffset) + 1;
-                        continue;
                     }
-                    xOffset = incrementingX ? xOffset + 1 : xOffset - 1
-                    if (Math.abs(xOffset) >= maxX) {
-                        xOffset = incrementingX ? maxX : maxX * -1;
-                    }
+
                 } else if (direction === "Vertical") {
-                    if ((currentFurthestY <= Math.abs(yOffset) + 1) || (index + (yOffset * 10) < 0) || (index + (yOffset * 10) > maxY)) {
-                        //continue will continue to loop but not do anything else within the loop for just this round and resets loop to start//
+                    let roundedIndex = Math.floor(index / 10 )* 10;
+                    yOffset = incrementingY ? yOffset + 10 : yOffset - 10;
+                    let flipDirection = false;
+                    if ((roundedIndex + yOffset) <= 0) {
+                        flipDirection = true;
+                        yOffset = yOffset + (Math.abs(roundedIndex + yOffset));
+                    }
+
+                    if (roundedIndex + yOffset >= maxY) {
+                        flipDirection = true;
+                        yOffset = yOffset - (maxY - (roundedIndex + yOffset));
+                    }
+
+                    if (currentFurthestY < Math.abs(yOffset)) {
+                        flipDirection = true;
+                        currentFurthestY = Math.abs(yOffset);
+                    }
+
+                    if (flipDirection === true) {
                         direction = "Horizontal";
                         incrementingY = !incrementingY;
-                        currentFurthestY = Math.abs(yOffset) + 1;
-                        continue;
-                    }
-                    yOffset = incrementingY ? yOffset + 1 : yOffset - 1
-                    if (Math.abs(yOffset) * 10 >= maxY) {
-                        yOffset = incrementingY ? maxY : maxY * -1;
                     }
                 }
-                newIndex = (yOffset * 10) + xOffset + index;
+                newIndex = (yOffset + xOffset + index);
                 console.log(`newIndex ${newIndex} xOffset ${xOffset} yOffset ${yOffset}`)
                 let tiles = this.getValidTiles(newIndex, ship, this.gameBoard);
                 shipFits = tiles.every((tile) => tile.ship === null);
