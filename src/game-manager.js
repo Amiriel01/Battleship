@@ -34,7 +34,10 @@ export default () => {
             } else {
                 this.turn = 1;
                 if (this.playerVsAI === true) {
-                    computerSelection();
+                    setTimeout(() => {
+                        let target = this.getComputerChoice();
+                        this.recieveAttackGame(target, this.player1);
+                    }, 2000)
                 }
                 console.log(this.turn)
             }
@@ -66,7 +69,7 @@ export default () => {
             player.gameBoard.recieveAttack(1, tileIndex);
             this.alternateTurns();
             this.allSunk();
-            
+
             // console.log(this.turn)
         },
 
@@ -101,11 +104,12 @@ export default () => {
         //computer selection//
         getComputerChoice: function () {
             let computerSelection = null;
-            
+
             while (computerSelection === null) {
-                Math.floor(Math.random() * 100);
-                if (computerSelection !== null) {
-                this.player2
+                let index = Math.floor(Math.random() * 100);
+                let tile = this.player1.gameBoard.myBoard[index];
+                if (tile.isHit === false && tile.isMiss === false) {
+                    computerSelection = index;
                 }
             }
             return computerSelection;

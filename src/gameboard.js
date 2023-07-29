@@ -35,7 +35,11 @@ let createGameBoard = () => {
                 tile.ship.hit();
                 tile.tile.classList.add("hit");
                 document.querySelector("#instructions").style.color = "#FF003F";
-                document.querySelector("#instructions").innerText = "You hit a ship!"
+                if (gameManager().turn === 2) {
+                    document.querySelector("#instructions").innerText = "Player One hit a ship!"
+                } else {
+                    document.querySelector("#instructions").innerText = "Player Two hit a ship!"
+                }
                 // tile.ship.isSunk().count = 0;
 
                 if (tile.ship.isSunk()) {
@@ -46,10 +50,14 @@ let createGameBoard = () => {
                 tile.isMiss = true;
                 tile.tile.classList.add("miss");
                 document.querySelector("#instructions").style.color = "#047fb0";
-                document.querySelector("#instructions").innerText = "You missed the ships."
+                if (gameManager().turn === 2) {
+                    document.querySelector("#instructions").innerText = "Player One missed the ships."
+                } else {
+                    document.querySelector("#instructions").innerText = "Player Two missed the ships."
+                }
             }
         },
-        
+
 
         shotFired: function (player, tileIndex) {
             //if player = 1 ?(is true/false) true take option 1 and false take option 2//
@@ -102,7 +110,7 @@ function createGrids(gridElement, gameBoardObject, player) {
                 } else {
                     gameManager().recieveAttackGame(tileIndex, player);
                 }
-                
+
                 // let clickLocation = [r, c];
                 // console.log(clickLocation)
 
@@ -118,6 +126,6 @@ function createGrids(gridElement, gameBoardObject, player) {
 export {
     createGameBoard,
     createGrids,
-    
-   
+
+
 };
