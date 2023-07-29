@@ -35,10 +35,18 @@ let createGameBoard = () => {
                 tile.ship.hit();
                 tile.tile.classList.add("hit");
                 document.querySelector("#instructions").style.color = "#FF003F";
-                if (gameManager().turn === 2) {
-                    document.querySelector("#instructions").innerText = "Player One hit a ship!"
+                if (gameManager().playerVsAI === false) {
+                    if (gameManager().turn === 2) {
+                        document.querySelector("#instructions").innerText = "Player One hit a ships."
+                    } else {
+                        document.querySelector("#instructions").innerText = "Player Two hit a ships."
+                    }
                 } else {
-                    document.querySelector("#instructions").innerText = "Player Two hit a ship!"
+                    if (gameManager().turn === 2) {
+                        document.querySelector("#instructions").innerText = "Player One hit a ships."
+                    } else {
+                        document.querySelector("#instructions").innerText = "The Computer hit a ships."
+                    }
                 }
                 // tile.ship.isSunk().count = 0;
 
@@ -50,10 +58,18 @@ let createGameBoard = () => {
                 tile.isMiss = true;
                 tile.tile.classList.add("miss");
                 document.querySelector("#instructions").style.color = "#047fb0";
-                if (gameManager().turn === 2) {
-                    document.querySelector("#instructions").innerText = "Player One missed the ships."
+                if (gameManager().playerVsAI === false) {
+                    if (gameManager().turn === 2) {
+                        document.querySelector("#instructions").innerText = "Player One missed the ships."
+                    } else {
+                        document.querySelector("#instructions").innerText = "Player Two missed the ships."
+                    }
                 } else {
-                    document.querySelector("#instructions").innerText = "Player Two missed the ships."
+                    if (gameManager().turn === 2) {
+                        document.querySelector("#instructions").innerText = "Player One missed the ships."
+                    } else {
+                        document.querySelector("#instructions").innerText = "The Computer missed the ships."
+                    }
                 }
             }
         },
