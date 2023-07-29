@@ -144,11 +144,11 @@ p {
 
 .ship-hover-marker {
     background-color: aquamarine;
-
 }
 
 .ship-here {
     background-color: #899499;
+    opacity: 1;
 }
 
 .hit {

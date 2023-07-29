@@ -37,7 +37,7 @@ export default () => {
                     setTimeout(() => {
                         let target = this.getComputerChoice();
                         this.recieveAttackGame(target, this.player1);
-                    }, 2000)
+                    }, 1200)
                 }
                 console.log(this.turn)
             }
@@ -93,8 +93,13 @@ export default () => {
             let player2ShipsSunk = this.player2.ships.every((ship) => ship.isSunk())
 
             if (player1ShipsSunk) {
-                document.querySelector("#instructions").style.color = "#ff0080";
-                document.querySelector("#instructions").innerText = "Player 2 Wins!";
+                if (this.playerVsAI === false) {
+                    document.querySelector("#instructions").style.color = "#ff0080";
+                    document.querySelector("#instructions").innerText = "Player 2 Wins!";
+                } else {
+                    document.querySelector("#instructions").style.color = "#ff0080";
+                    document.querySelector("#instructions").innerText = "The Computer Wins!";
+                }
             } else if (player2ShipsSunk) {
                 document.querySelector("#instructions").style.color = "#ff0080";
                 document.querySelector("#instructions").innerText = "Player 1 Wins!";

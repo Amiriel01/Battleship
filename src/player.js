@@ -85,7 +85,7 @@ let player = (rootElement, playerName) => {
                 setTimeout(() => {
                     //give a css animation for fade out//
                     gameManager().hideShips();
-                }, 3000)
+                }, 2000)
             }
         },
 

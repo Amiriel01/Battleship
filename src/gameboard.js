@@ -51,7 +51,7 @@ let createGameBoard = () => {
                 // tile.ship.isSunk().count = 0;
 
                 if (tile.ship.isSunk()) {
-                    console.log("Ship is Sunk!");
+                    // console.log("Ship is Sunk!");
                     console.log(tile.ship.isSunk())
                 }
             } else {
