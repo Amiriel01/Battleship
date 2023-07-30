@@ -99,20 +99,19 @@ let instance = null;
 
         alternateTurns: function () {
             // if (this.allShipsSunk === true) {
-            //     gameBoard().tile.removeAttribute("click");
-            //     return; }
+            //     return;
+            // }
+
             if (this.turn === 1) {
                 this.turn = 2;
-                // console.log(this.turn)
             } else {
                 this.turn = 1;
-                if (this.playerVsAI === true && this.allShipsSunk === false) {
+                if (this.playerVsAI === true) {
                     setTimeout(() => {
                         let target = this.getComputerChoice();
                         this.recieveAttackGame(target, this.player1);
                     }, 1200)
                 }
-                // console.log(this.turn)
             }
 
         },
@@ -289,7 +288,8 @@ let createGameBoard = () => {
             } else {
                 tile.isMiss = true;
                 tile.tile.classList.add("miss");
-                document.querySelector("#instructions").style.color = "#047fb0";
+                document.querySelector("#instructions").style.color = "#7fcdff";
+                document.querySelector("#instructions").style.textShadow = "-1px 1px 2px #064273,1px 1px 2px #064273, 1px -1px 0 #064273,-1px -1px 0 #064273";
                 if ((0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().playerVsAI === false) {
                     if ((0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().turn === 2) {
                         document.querySelector("#instructions").innerText = "Player One missed the ships."

@@ -57,7 +57,8 @@ let createGameBoard = () => {
             } else {
                 tile.isMiss = true;
                 tile.tile.classList.add("miss");
-                document.querySelector("#instructions").style.color = "#047fb0";
+                document.querySelector("#instructions").style.color = "#7fcdff";
+                document.querySelector("#instructions").style.textShadow = "-1px 1px 2px #064273,1px 1px 2px #064273, 1px -1px 0 #064273,-1px -1px 0 #064273";
                 if (gameManager().playerVsAI === false) {
                     if (gameManager().turn === 2) {
                         document.querySelector("#instructions").innerText = "Player One missed the ships."

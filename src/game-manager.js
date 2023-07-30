@@ -31,20 +31,19 @@ export default () => {
 
         alternateTurns: function () {
             // if (this.allShipsSunk === true) {
-            //     gameBoard().tile.removeAttribute("click");
-            //     return; }
+            //     return;
+            // }
+
             if (this.turn === 1) {
                 this.turn = 2;
-                // console.log(this.turn)
             } else {
                 this.turn = 1;
-                if (this.playerVsAI === true && this.allShipsSunk === false) {
+                if (this.playerVsAI === true) {
                     setTimeout(() => {
                         let target = this.getComputerChoice();
                         this.recieveAttackGame(target, this.player1);
                     }, 1200)
                 }
-                // console.log(this.turn)
             }
 
         },
