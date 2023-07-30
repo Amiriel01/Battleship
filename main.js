@@ -71,6 +71,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 let instance = null;
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (() => {
@@ -83,6 +84,7 @@ let instance = null;
         player2: (0,_player__WEBPACK_IMPORTED_MODULE_0__.player)(document.getElementById("player2-controls"), "player2"),
         turn: 2,
         playerVsAI: false,
+        allShipsSunk: false,
 
 
         initialize: function () {
@@ -96,19 +98,23 @@ let instance = null;
         },
 
         alternateTurns: function () {
+            // if (this.allShipsSunk === true) {
+            //     gameBoard().tile.removeAttribute("click");
+            //     return; }
             if (this.turn === 1) {
                 this.turn = 2;
-                console.log(this.turn)
+                // console.log(this.turn)
             } else {
                 this.turn = 1;
-                if (this.playerVsAI === true) {
+                if (this.playerVsAI === true && this.allShipsSunk === false) {
                     setTimeout(() => {
                         let target = this.getComputerChoice();
                         this.recieveAttackGame(target, this.player1);
                     }, 1200)
                 }
-                console.log(this.turn)
+                // console.log(this.turn)
             }
+
         },
 
         turnOrder: function (playerObject) {
@@ -159,18 +165,22 @@ let instance = null;
         allSunk: function () {
             let player1ShipsSunk = this.player1.ships.every((ship) => ship.isSunk())
             let player2ShipsSunk = this.player2.ships.every((ship) => ship.isSunk())
+            // let allShipsSunk = false;
 
             if (player1ShipsSunk) {
                 if (this.playerVsAI === false) {
-                    document.querySelector("#instructions").style.color = "#ff0080";
+                    document.querySelector("#instructions").style.color = "purple";
                     document.querySelector("#instructions").innerText = "Player 2 Wins!";
+                    this.allShipsSunk = true;
                 } else {
-                    document.querySelector("#instructions").style.color = "#ff0080";
+                    document.querySelector("#instructions").style.color = "purple";
                     document.querySelector("#instructions").innerText = "The Computer Wins!";
+                    this.allShipsSunk = true;  
                 }
             } else if (player2ShipsSunk) {
-                document.querySelector("#instructions").style.color = "#ff0080";
+                document.querySelector("#instructions").style.color = "purple";
                 document.querySelector("#instructions").innerText = "Player 1 Wins!";
+                this.allShipsSunk = true;
             }
         },
 
@@ -339,11 +349,17 @@ function createGrids(gridElement, gameBoardObject, player) {
             let enemyGridTile = createTile(tile, r, c);
             gameBoardObject.myBoard.push(myGridTile);
             gameBoardObject.enemyBoard.push(enemyGridTile);
+           
+
             tile.addEventListener("click", () => {
+ 
                 let tileIndex = (r * 10) + c;
+                
                 if (!(0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().canStartGame()) {
                     document.querySelector("#instructions").style.color = "#FF4500";
                     document.querySelector("#instructions").innerText = "Place all ships on the boards before starting the game!"
+                    return;
+                } else if ((0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().allShipsSunk === true) {
                     return;
                 } else {
                     (0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().recieveAttackGame(tileIndex, player);
