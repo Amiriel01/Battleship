@@ -117,11 +117,17 @@ function createGrids(gridElement, gameBoardObject, player) {
             let enemyGridTile = createTile(tile, r, c);
             gameBoardObject.myBoard.push(myGridTile);
             gameBoardObject.enemyBoard.push(enemyGridTile);
+           
+
             tile.addEventListener("click", () => {
+ 
                 let tileIndex = (r * 10) + c;
+                
                 if (!gameManager().canStartGame()) {
                     document.querySelector("#instructions").style.color = "#FF4500";
                     document.querySelector("#instructions").innerText = "Place all ships on the boards before starting the game!"
+                    return;
+                } else if (gameManager().allShipsSunk === true) {
                     return;
                 } else {
                     gameManager().recieveAttackGame(tileIndex, player);
