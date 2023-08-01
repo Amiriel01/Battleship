@@ -5,16 +5,16 @@ This Battleship game was created using JavaScript, HTML, CSS, webpack, ESLin, an
 ***Project Images***
 
 Game Start:
-![](images/gamestart.png)
+![](dist/images/gamestart.png)
 
 Ship Hit:
-![](images/shiphit.png)
+![](dist/images/shiphit.png)
 
 Ship Missed:
-![](images/shipmissed.png)
+![](dist/images/shipmissed.png)
 
 Winner:
-![](images/winner.png)
+![](dist/images/winner.png)
 
 ***Features***
 
