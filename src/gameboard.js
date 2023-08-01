@@ -131,6 +131,9 @@ function createGrids(gridElement, gameBoardObject, player) {
                 } else if (gameManager().allShipsSunk === true) {
                     return;
                 } else {
+                    if (gameManager().turn === 1 && gameManager().playerVsAI === true){
+                        return;
+                    }
                     gameManager().recieveAttackGame(tileIndex, player);
                 }
 

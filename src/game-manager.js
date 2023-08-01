@@ -4,6 +4,7 @@ import { createGameBoard } from "./gameboard";
 import domManager from "./dom-manager";
 import { createGrids } from "./gameboard";
 
+
 let instance = null;
 
 export default () => {
@@ -17,6 +18,7 @@ export default () => {
         turn: 2,
         playerVsAI: false,
         allShipsSunk: false,
+        timeOut: false,
 
 
         initialize: function () {
@@ -31,21 +33,24 @@ export default () => {
 
         alternateTurns: function () {
             // if (this.allShipsSunk === true) {
+            //     clearTimeout(this.timeOut);
             //     return;
             // }
-
             if (this.turn === 1) {
                 this.turn = 2;
             } else {
                 this.turn = 1;
                 if (this.playerVsAI === true) {
-                    setTimeout(() => {
-                        let target = this.getComputerChoice();
-                        this.recieveAttackGame(target, this.player1);
+                    this.timeOut = setTimeout(() => {
+                        if (!this.allShipsSunk) {
+                            let target = this.getComputerChoice();
+                            this.recieveAttackGame(target, this.player1);
+                        }
                     }, 1200)
                 }
             }
-
+            // console.log(this.tileIndex)
+            console.log(this.turn);
         },
 
         turnOrder: function (playerObject) {
@@ -71,11 +76,16 @@ export default () => {
             if (player !== originatingPlayerGameboard) {
                 return;
             }
-            player.gameBoard.recieveAttack(1, tileIndex);
-            this.alternateTurns();
-            this.allSunk();
 
-            // console.log(this.turn)
+           
+
+            let tile = player.gameBoard.myBoard[tileIndex];
+            if (!tile.isHit && !tile.isMiss){
+                player.gameBoard.recieveAttack(1, tileIndex);
+                this.alternateTurns();
+                this.allSunk();
+            }
+           
         },
 
         canStartGame: function () {
@@ -96,7 +106,6 @@ export default () => {
         allSunk: function () {
             let player1ShipsSunk = this.player1.ships.every((ship) => ship.isSunk())
             let player2ShipsSunk = this.player2.ships.every((ship) => ship.isSunk())
-            // let allShipsSunk = false;
 
             if (player1ShipsSunk) {
                 if (this.playerVsAI === false) {
@@ -106,7 +115,7 @@ export default () => {
                 } else {
                     document.querySelector("#instructions").style.color = "purple";
                     document.querySelector("#instructions").innerText = "The Computer Wins!";
-                    this.allShipsSunk = true;  
+                    this.allShipsSunk = true;
                 }
             } else if (player2ShipsSunk) {
                 document.querySelector("#instructions").style.color = "purple";

@@ -72,6 +72,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 let instance = null;
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (() => {
@@ -85,6 +86,7 @@ let instance = null;
         turn: 2,
         playerVsAI: false,
         allShipsSunk: false,
+        timeOut: false,
 
 
         initialize: function () {
@@ -99,21 +101,24 @@ let instance = null;
 
         alternateTurns: function () {
             // if (this.allShipsSunk === true) {
+            //     clearTimeout(this.timeOut);
             //     return;
             // }
-
             if (this.turn === 1) {
                 this.turn = 2;
             } else {
                 this.turn = 1;
                 if (this.playerVsAI === true) {
-                    setTimeout(() => {
-                        let target = this.getComputerChoice();
-                        this.recieveAttackGame(target, this.player1);
+                    this.timeOut = setTimeout(() => {
+                        if (!this.allShipsSunk) {
+                            let target = this.getComputerChoice();
+                            this.recieveAttackGame(target, this.player1);
+                        }
                     }, 1200)
                 }
             }
-
+            // console.log(this.tileIndex)
+            console.log(this.turn);
         },
 
         turnOrder: function (playerObject) {
@@ -139,11 +144,16 @@ let instance = null;
             if (player !== originatingPlayerGameboard) {
                 return;
             }
-            player.gameBoard.recieveAttack(1, tileIndex);
-            this.alternateTurns();
-            this.allSunk();
 
-            // console.log(this.turn)
+           
+
+            let tile = player.gameBoard.myBoard[tileIndex];
+            if (!tile.isHit && !tile.isMiss){
+                player.gameBoard.recieveAttack(1, tileIndex);
+                this.alternateTurns();
+                this.allSunk();
+            }
+           
         },
 
         canStartGame: function () {
@@ -164,7 +174,6 @@ let instance = null;
         allSunk: function () {
             let player1ShipsSunk = this.player1.ships.every((ship) => ship.isSunk())
             let player2ShipsSunk = this.player2.ships.every((ship) => ship.isSunk())
-            // let allShipsSunk = false;
 
             if (player1ShipsSunk) {
                 if (this.playerVsAI === false) {
@@ -174,7 +183,7 @@ let instance = null;
                 } else {
                     document.querySelector("#instructions").style.color = "purple";
                     document.querySelector("#instructions").innerText = "The Computer Wins!";
-                    this.allShipsSunk = true;  
+                    this.allShipsSunk = true;
                 }
             } else if (player2ShipsSunk) {
                 document.querySelector("#instructions").style.color = "purple";
@@ -362,6 +371,9 @@ function createGrids(gridElement, gameBoardObject, player) {
                 } else if ((0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().allShipsSunk === true) {
                     return;
                 } else {
+                    if ((0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().turn === 1 && (0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().playerVsAI === true){
+                        return;
+                    }
                     (0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().recieveAttackGame(tileIndex, player);
                 }
 
@@ -572,7 +584,7 @@ let player = (rootElement, playerName) => {
             let currentFurthestX = 0;
             let currentFurthestY = 0;
             let direction = "Horizontal";
-            const maxY = 100;
+            const maxY = 99;
             let newIndex = index;
             while (shipFits === false) {
                 console.log(`newIndex ${newIndex} xOffset ${xOffset} yOffset ${yOffset}`)
@@ -618,7 +630,7 @@ let player = (rootElement, playerName) => {
 
                     if (roundedIndex + yOffset >= maxY) {
                         flipDirection = true;
-                        yOffset = yOffset - (maxY - (roundedIndex + yOffset));
+                        yOffset = yOffset - (maxY - (roundedIndex + yOffset ));
                     }
 
                     if (currentFurthestY < Math.abs(yOffset)) {

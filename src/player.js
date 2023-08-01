@@ -174,7 +174,7 @@ let player = (rootElement, playerName) => {
             let currentFurthestX = 0;
             let currentFurthestY = 0;
             let direction = "Horizontal";
-            const maxY = 100;
+            const maxY = 99;
             let newIndex = index;
             while (shipFits === false) {
                 console.log(`newIndex ${newIndex} xOffset ${xOffset} yOffset ${yOffset}`)
@@ -220,7 +220,7 @@ let player = (rootElement, playerName) => {
 
                     if (roundedIndex + yOffset >= maxY) {
                         flipDirection = true;
-                        yOffset = yOffset - (maxY - (roundedIndex + yOffset));
+                        yOffset = yOffset - (maxY - (roundedIndex + yOffset ));
                     }
 
                     if (currentFurthestY < Math.abs(yOffset)) {
