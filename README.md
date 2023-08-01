@@ -29,11 +29,13 @@ Winner:
 
 3. The player can put ships on their board two ways.
 
-    a. The Randomize Ships button
+    a. The Randomize Ships button. This will randomly shuffle the ships vertical and horizontal so they are not all the same direction.
 
     b. Dragging the ships from the ships' container to the board while dropping the ships where the player chooses.
 
     c. The Player vs. Computer mode will place the ships randomly on the second board. The computer will go second.
+
+    d. The player can also choose the orientation of their ship to be vertical or horizontal by using the ship orientation button. The user can switch back and forth during ship placement if they choose.
 
 
 4. Board effects:
