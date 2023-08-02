@@ -37,15 +37,15 @@ let createGameBoard = () => {
                 document.querySelector("#instructions").style.color = "#FF003F";
                 if (gameManager().playerVsAI === false) {
                     if (gameManager().turn === 2) {
-                        document.querySelector("#instructions").innerText = "Player One hit a ships."
+                        document.querySelector("#instructions").innerText = "Player One hit a ship."
                     } else {
-                        document.querySelector("#instructions").innerText = "Player Two hit a ships."
+                        document.querySelector("#instructions").innerText = "Player Two hit a ship."
                     }
                 } else {
                     if (gameManager().turn === 2) {
-                        document.querySelector("#instructions").innerText = "Player One hit a ships."
+                        document.querySelector("#instructions").innerText = "Player One hit a ship."
                     } else {
-                        document.querySelector("#instructions").innerText = "The Computer hit a ships."
+                        document.querySelector("#instructions").innerText = "The Computer hit a ship."
                     }
                 }
                 // tile.ship.isSunk().count = 0;
