@@ -1,5 +1,7 @@
 # Battleship
 
+**Objective**
+
 This Battleship game was created using JavaScript, HTML, CSS, webpack, ESLin, and JSON. I used some Test Driven Development (TDD) during this project also. The Battleship game can be played with two players or one player against the computer.
 
 ***Project Images***
