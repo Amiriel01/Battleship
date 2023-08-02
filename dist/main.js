@@ -277,15 +277,15 @@ let createGameBoard = () => {
                 document.querySelector("#instructions").style.color = "#FF003F";
                 if ((0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().playerVsAI === false) {
                     if ((0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().turn === 2) {
-                        document.querySelector("#instructions").innerText = "Player One hit a ships."
+                        document.querySelector("#instructions").innerText = "Player One hit a ship."
                     } else {
-                        document.querySelector("#instructions").innerText = "Player Two hit a ships."
+                        document.querySelector("#instructions").innerText = "Player Two hit a ship."
                     }
                 } else {
                     if ((0,_game_manager__WEBPACK_IMPORTED_MODULE_2__["default"])().turn === 2) {
-                        document.querySelector("#instructions").innerText = "Player One hit a ships."
+                        document.querySelector("#instructions").innerText = "Player One hit a ship."
                     } else {
-                        document.querySelector("#instructions").innerText = "The Computer hit a ships."
+                        document.querySelector("#instructions").innerText = "The Computer hit a ship."
                     }
                 }
                 // tile.ship.isSunk().count = 0;
