@@ -114,7 +114,7 @@ let instance = null;
                             let target = this.getComputerChoice();
                             this.recieveAttackGame(target, this.player1);
                         }
-                    }, 1200)
+                    }, 2000)
                 }
             }
             // console.log(this.tileIndex)
